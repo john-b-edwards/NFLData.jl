@@ -89,8 +89,8 @@ end
 function load_pbp(seasons = most_recent_season())
     if minimum(seasons) < 1999
         throw(DomainError(minimum(seasons),"No PBP data available prior to 1999!"))
-    elseif minimum(seasons) > 2024 # TODO replace with current season logi
-        throw(DomainError(minimum(seasons),"No PBP data available after 2024!"))
+    elseif minimum(seasons) > most_recent_season() 
+        throw(DomainError(minimum(seasons),"No PBP data available after $most_recent_season()!"))
     end
     if length(seasons) > 1
         df = reduce(vcat, from_url.("https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_",seasons))
