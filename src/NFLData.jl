@@ -107,13 +107,14 @@ end
 
 # load NFLFastR PBP
 function load_pbp(seasons = most_recent_season())
-    if minimum(seasons) < 1999
-        throw(DomainError(minimum(seasons),"No PBP data available prior to 1999!"))
+    start_year = 1999
+    if seasons == true
+        seasons = start_year:most_recent_season() 
+    end
+    if minimum(seasons) < start_year
+        throw(DomainError(minimum(seasons),"No PBP data available prior to $start_year\\!"))
     elseif minimum(seasons) > most_recent_season() 
         throw(DomainError(minimum(seasons),"No PBP data available after $most_recent_season()!"))
-    end
-    if seasons == true
-        seasons = 1999:most_recent_season() 
     end
     if length(seasons) > 1
         df = reduce(vcat, from_url.("https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_",seasons))
@@ -131,13 +132,14 @@ end
 
 # load depth charts
 function load_depth_charts(seasons = most_recent_season())
-    if minimum(seasons) < 2001
-        throw(DomainError(minimum(seasons),"No depth charts available prior to 2001!"))
+    start_year = 2001
+    if seasons == true
+        seasons = start_year:most_recent_season() 
+    end
+    if minimum(seasons) < start_year
+        throw(DomainError(minimum(seasons),"No depth charts available prior to $start_year\\!"))
     elseif minimum(seasons) > most_recent_season() 
         throw(DomainError(minimum(seasons),"No PBP data available after $most_recent_season()!"))
-    end
-    if seasons == true
-        seasons = 1999:most_recent_season() 
     end
     if length(seasons) > 1
         df = reduce(vcat, from_url.("https://github.com/nflverse/nflverse-data/releases/download/depth_charts/depth_charts_",seasons))
@@ -151,6 +153,29 @@ end
 # load draft picks
 function load_draft_picks()
     return from_url("https://github.com/nflverse/nflverse-data/releases/download/draft_picks/draft_picks")
+end
+
+# load espn qb stats
+function load_espn_qbr(seasons = most_recent_season(), summary_type = "season")
+    start_year = 2006
+    if seasons == true
+        seasons = start_year:most_recent_season() 
+    end
+    if minimum(seasons) < start_year
+        throw(DomainError(minimum(seasons),"No depth charts available prior to $start_year\\!"))
+    elseif minimum(seasons) > most_recent_season() 
+        throw(DomainError(minimum(seasons),"No PBP data available after $most_recent_season()!"))
+    end
+    if !(summary_type in ["season","week"])
+        throw(DomainError(summary_type,"Please pass in one of \"season\" or \"week\" for the argument `summary_type!`"))
+    end
+    if length(seasons) > 1
+        df = reduce(vcat, from_url.("https://github.com/nflverse/nflverse-data/releases/download/depth_charts/depth_charts_",seasons))
+    else
+        df = from_url("https://github.com/nflverse/nflverse-data/releases/download/depth_charts/depth_charts_",seasons)
+    end
+
+    return df
 end
 
 end
