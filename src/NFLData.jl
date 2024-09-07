@@ -1,9 +1,9 @@
 module NFLData
 
+using CSV
 using Preferences
 using DataFrames
-using Parquet
-using HTTP
+using UrlDownload: urldownload
 using Scratch: @get_scratch!, clear_scratchspaces!
 using Dates
 
@@ -74,14 +74,13 @@ end
 # Downloads a resource, stores it within a scratchspace
 function from_url(url::String)
     if cache_data
-        fname = joinpath(download_cache, basename(url) * ".parquet")
+        fname = joinpath(download_cache, basename(url) * ".csv.gz")
         if !isfile(fname)
-            download(url * ".parquet", fname)
+            download(url * ".csv.gz", fname)
         end
-        df = DataFrame(read_parquet(fname))
+        df = DataFrame(CSV.File(fname))
     else
-        res = GET(url * ".parquet")
-        df = DataFrame(read_parquet(res.body))
+        df = urldownload(url * ".csv.gz")
     end 
     return df
 end
