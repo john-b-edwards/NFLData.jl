@@ -19,6 +19,7 @@ export load_espn_qbr
 export load_ff_playerids
 export load_ff_rankings
 export load_ff_opportunity
+export load_ftn_charting
 export most_recent_season
 export clear_cache
 
@@ -256,4 +257,6 @@ function load_ftn_charting(seasons = most_recent_season())
     end
 
     return df
+end
+
 end

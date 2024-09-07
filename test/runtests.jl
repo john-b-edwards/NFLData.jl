@@ -12,4 +12,5 @@ using Test
     @test size(load_ff_playerids())[1] > 0
     @test size(load_ff_rankings())[1] > 0
     @test size(load_ff_opportunity())[1] > 0
+    @test size(load_ftn_charting())[1] > 0
 end
