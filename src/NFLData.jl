@@ -22,7 +22,6 @@ export load_ff_opportunity
 export most_recent_season
 export clear_cache
 
-
 ## PREFERENCES
 # set caching preferences, default to true
 function cache_data_pref(pref::Bool)
@@ -57,6 +56,20 @@ function __init__()
 end
 
 ## UTILITIES
+# helper function, throws an error in case data is unavailable
+function check_years(years_to_check, start_year, release, roster = F)
+    most_rec_sea = most_recent_season(roster) 
+    if years_to_check == true
+        years_to_check = start_year:most_recent_season() 
+    end
+    if minimum(years_to_check) < start_year
+        throw(DomainError(minimum(years_to_check),"No $release available prior to $start_year\\!"))
+    elseif minimum(years_to_check) > most_rec_sea
+        throw(DomainError(minimum(years_to_check),"No $release available after $most_rec_sea!"))
+    end
+    return years_to_check
+end
+
 # helper function for computing start of nfl season
 function compute_labor_day(season::Int)
     earliest = Dates.firstdayofweek(Date(season,9,1))
@@ -154,15 +167,7 @@ end
 
 # load NFLFastR PBP
 function load_pbp(seasons = most_recent_season())
-    start_year = 1999
-    if seasons == true
-        seasons = start_year:most_recent_season() 
-    end
-    if minimum(seasons) < start_year
-        throw(DomainError(minimum(seasons),"No PBP data available prior to $start_year\\!"))
-    elseif minimum(seasons) > most_recent_season() 
-        throw(DomainError(minimum(seasons),"No PBP data available after $most_recent_season()!"))
-    end
+    seasons = check_years(seasons, 1999, "NFL PBP data")
     if length(seasons) > 1
         df = reduce(vcat, from_url.("https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_",seasons))
     else
@@ -179,15 +184,7 @@ end
 
 # load depth charts
 function load_depth_charts(seasons = most_recent_season())
-    start_year = 2001
-    if seasons == true
-        seasons = start_year:most_recent_season() 
-    end
-    if minimum(seasons) < start_year
-        throw(DomainError(minimum(seasons),"No depth charts available prior to $start_year\\!"))
-    elseif minimum(seasons) > most_recent_season() 
-        throw(DomainError(minimum(seasons),"No depth charts available after $most_recent_season()!"))
-    end
+    seasons = check_years(seasons, 2001, "NFL depth charts", true)
     if length(seasons) > 1
         df = reduce(vcat, from_url.("https://github.com/nflverse/nflverse-data/releases/download/depth_charts/depth_charts_",seasons))
     else
@@ -233,15 +230,7 @@ end
 
 # load ff opportunity stats
 function load_ff_opportunity(seasons = most_recent_season(), stat_type = "weekly", model_version = "latest")
-    start_year = 2006
-    if seasons == true
-        seasons = start_year:most_recent_season() 
-    end
-    if minimum(seasons) < start_year
-        throw(DomainError(minimum(seasons),"No FF Opportunity data available prior to $start_year\\!"))
-    elseif minimum(seasons) > most_recent_season() 
-        throw(DomainError(minimum(seasons),"No FF Opportunity data available after $most_recent_season()!"))
-    end
+    seasons = check_years(seasons, 2006, "FF opportunity data")
     if !(stat_type in ["weekly","pbp_pass","pbp_rush"])
         throw(DomainError(stat_type,"Please pass in one of \"weekly\",\"pbp_pass\",\"pbp_rush\" for the argument `stat_type`!"))
     end
@@ -257,5 +246,14 @@ function load_ff_opportunity(seasons = most_recent_season(), stat_type = "weekly
     return df
 end
 
+# load ftn charting data
+function load_ftn_charting(seasons = most_recent_season())
+    seasons = check_years(seasons, 2022, "FTN charting data")
+    if length(seasons) > 1
+        df = reduce(vcat, from_url.("https://github.com/nflverse/nflverse-data/releases/download/depth_charts/depth_charts_",seasons))
+    else
+        df = from_url("https://github.com/nflverse/nflverse-data/releases/download/depth_charts/depth_charts_",seasons)
+    end
 
+    return df
 end
