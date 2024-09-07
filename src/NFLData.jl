@@ -4,13 +4,14 @@ using CSV
 using Preferences
 using DataFrames
 using UrlDownload: urldownload
-using Scratch: @get_scratch!
+using Scratch: @get_scratch!, clear_scratchspaces!
 using Dates
 
 export cache_data_pref
 export load_players
 export load_pbp
 export most_recent_season
+export clear_cache
 
 ## PREFERENCES
 # set caching preferences, default to true
@@ -18,11 +19,30 @@ function cache_data_pref(pref::Bool)
     @set_preferences!("cache" => pref)
 end
 
+function clear_cache()
+    clear_scratchspaces!(NFLData)
+end
+
 const cache_data = @load_preference("cache", true)
 
 download_cache = ""
 
 function __init__()
+    printstyled("By default, NFLData.jl caches data for up to 24 hours.\n", color = :blue)
+    printstyled("To disable this caching, run `cache_data_pref(false)` and restart Julia.\n", color = :blue)
+    printstyled("To clear the cache, run `clear_cache()`.\n", color = :blue)
+    # initialize cache
+    tmp_cache = @get_scratch!("downloaded_files")
+    # check for what files are in the cache and how old the oldest one is
+    if length(readdir(tmp_cache)) > 0
+        oldest_file = unix2datetime(minimum([mtime(joinpath(tmp_cache, file)) for file in readdir(tmp_cache)]))
+        # check how old the oldest file in the cache is
+        time_since_last_cache = round(now() - oldest_file, Hour(1))
+        # if it's been more than 24 hours, clear the cache
+        if time_since_last_cache >= Hour(24)
+            clear_scratchspaces!(NFLData)
+        end
+    end
     global download_cache = @get_scratch!("downloaded_files")
 end
 
