@@ -148,6 +148,9 @@ function load_depth_charts(seasons = most_recent_season())
     return df
 end
 
-
+# load draft picks
+function load_draft_picks()
+    return from_url("https://github.com/nflverse/nflverse-data/releases/download/draft_picks/draft_picks")
+end
 
 end
