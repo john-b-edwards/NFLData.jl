@@ -126,4 +126,20 @@ function load_contracts()
     return from_url("https://github.com/nflverse/nflverse-data/releases/download/contracts/historical_contracts")
 end
 
+# load depth charts
+function load_pbp(seasons = most_recent_season())
+    if minimum(seasons) < 2001
+        throw(DomainError(minimum(seasons),"No depth charts available prior to 2001!"))
+    elseif minimum(seasons) > most_recent_season() 
+        throw(DomainError(minimum(seasons),"No PBP data available after $most_recent_season()!"))
+    end
+    if length(seasons) > 1
+        df = reduce(vcat, from_url.("https://github.com/nflverse/nflverse-data/releases/download/depth_charts/depth_charts_",seasons))
+    else
+        df = from_url("https://github.com/nflverse/nflverse-data/releases/download/depth_charts/depth_charts_",seasons)
+    end
+
+    return df
+end
+
 end
