@@ -10,8 +10,15 @@ using Dates
 export cache_data_pref
 export load_players
 export load_pbp
+export load_contracts
+export load_depth_charts
+export load_draft_picks
+export load_espn_qbr
+export load_ff_playerids
+export load_ff_rankings
 export most_recent_season
 export clear_cache
+
 
 ## PREFERENCES
 # set caching preferences, default to true
@@ -193,9 +200,9 @@ function load_espn_qbr(seasons = most_recent_season(), summary_type = "season")
     return df
 end
 
-#= # load fantasy player ids
+# load fantasy player ids
 function load_ff_playerids()
-    return DataFrame(urldownload("https://github.com/dynastyprocess/data/raw/master/files/db_playerids.csv"))
+    return from_url("https://github.com/dynastyprocess/data/raw/master/files/db_playerids")
 end
 
 # load latest fantasy player rankings
@@ -204,38 +211,13 @@ function load_ff_rankings(type = "draft")
         throw(DomainError(type,"Please pass in one of \"draft\", \"week\", or \"all\" for the argument `type`!"))
     end
     if type == "draft"
-        df = DataFrame(urldownload("https://github.com/dynastyprocess/data/raw/master/files/db_fpecr_latest.csv"))
+        df = from_url("https://github.com/dynastyprocess/data/raw/master/files/db_fpecr_latest")
     elseif type == "week"
-        df = DataFrame(urldownload("https://github.com/dynastyprocess/data/raw/master/files/fp_latest_weekly.csv"))
+        df = from_url("https://github.com/dynastyprocess/data/raw/master/files/fp_latest_weekly")
     elseif type == "all"
-        df = DataFrame(urldownload("https://github.com/dynastyprocess/data/raw/master/files/db_fpecr.csv"))
+        df = from_url("https://github.com/dynastyprocess/data/raw/master/files/db_fpecr")
     end
     return df
 end
-
-function load_ff_opportunity(seasons = most_recent_season(), summary_type = "weekly", model_version = "latest")
-    start_year = 2006
-    if seasons == true
-        seasons = start_year:most_recent_season() 
-    end
-    if minimum(seasons) < start_year
-        throw(DomainError(minimum(seasons),"No FFOpportunity data available prior to $start_year\\!"))
-    elseif minimum(seasons) > most_recent_season() 
-        throw(DomainError(minimum(seasons),"No FFOpportunity data available after $most_recent_season()!"))
-    end
-    if !(summary_type in ["weekly","pbp_pass","pbp_rush"])
-        throw(DomainError(summary_type,"Please pass in one of \"weekly\", \"pbp_pass\", or \"pbp_rush\" for the argument `summary_type`!"))
-    end
-    if !(model_version in ["latest","v1.0.0"])
-        throw(DomainError(model_version,"Please pass in one of \"latest\" or \"v1.0.0\" for the argument `model_version`!"))
-    end
-    if length(seasons) > 1
-        df = reduce(vcat, from_url.("https://github.com/nflverse/nflverse-data/releases/download/depth_charts/depth_charts_",seasons))
-    else
-        df = from_url("https://github.com/nflverse/nflverse-data/releases/download/depth_charts/depth_charts_",seasons)
-    end
-
-    return df
-end =#
 
 end
