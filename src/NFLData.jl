@@ -23,13 +23,10 @@ function from_url(url)
     if cache_data
         fname = joinpath(download_cache, basename(url))
         if !isfile(fname)
-            println("Downloading to $fname !")
             download(url, fname)
         end
-        println("Reading from $fname !")
         df = DataFrame(CSV.File(fname))
     else
-        println("Not caching, downloading from $url !")
         df = urldownload(url)
     end 
     return df
@@ -42,5 +39,7 @@ end
 function load_players()
     return from_url("https://github.com/nflverse/nflverse-data/releases/download/players/players.csv")
 end
+
+
 
 end
