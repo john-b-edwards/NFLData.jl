@@ -121,5 +121,9 @@ function load_pbp(seasons = most_recent_season())
     return df
 end
 
+# load contract data
+function load_contracts()
+    return from_url("https://github.com/nflverse/nflverse-data/releases/download/contracts/historical_contracts")
+end
 
 end
