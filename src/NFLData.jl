@@ -6,6 +6,8 @@ using Parquet2
 using HTTP
 using Scratch: @get_scratch!, clear_scratchspaces!
 using Dates
+using Downloads
+using CSV
 
 export cache_data_pref
 export load_players
@@ -16,6 +18,7 @@ export load_draft_picks
 export load_espn_qbr
 export load_ff_playerids
 export load_ff_rankings
+export load_ff_opportunity
 export most_recent_season
 export clear_cache
 
@@ -90,34 +93,56 @@ end
 
 
 # Downloads a resource, stores it within a scratchspace
-function from_url(url::String)
+function from_url(url::String; file_type::String = ".parquet")
+    if !(file_type in [".parquet",".csv",".csv.gz"])
+        throw(DomainError(file_type,"`file_type` must be one of either \".parquet\", \".csv\", or \".csv.gz\"."))
+    end
     if cache_data
-        fname = joinpath(download_cache, basename(url) * ".parquet")
+        fname = joinpath(download_cache, basename(url) * file_type)
         if !isfile(fname)
-            download(url * ".parquet", fname)
+            Downloads.download(url * file_type, fname)
         end
-        df = parquet2df(fname)
+        if file_type == ".parquet"
+            df = parquet2df(fname)
+        elseif file_type in [".csv",".csv.gz"]
+            df = DataFrame(CSV.File(fname))
+        end
     else
-        res = HTTP.get(url * ".parquet")
-        ds = Parquet2.Dataset(res.body)
-        df = DataFrame(ds)
+        if file_type == ".parquet"
+            res = HTTP.get(url * file_type)
+            ds = Parquet2.Dataset(res.body)
+            df = DataFrame(ds)
+        elseif file_type in [".csv",".csv.gz"]
+            df = DataFrame(CSV.File(fname))
+        end
     end 
     return df
 end
 
 # for getting data from a specific season
 # can be broadcasted e.g. from_url.(url,2022:2024)
-function from_url(url::String, seasons::Int)
+function from_url(url::String, seasons::Int; file_type::String = ".parquet")
+    if !(file_type in [".parquet",".csv",".csv.gz"])
+        throw(DomainError(file_type,"`file_type` must be one of either \".parquet\", \".csv\", or \".csv.gz\"."))
+    end
     if cache_data
-        fname = joinpath(download_cache, basename(url) * string(seasons) * ".parquet")
+        fname = joinpath(download_cache, basename(url) * string(seasons) * file_type)
         if !isfile(fname)
-            download(url * string(seasons) * ".parquet", fname)
+            Downloads.download(url * string(seasons) * file_type, fname)
         end
-        df = parquet2df(fname)
+        if file_type == ".parquet"
+            df = parquet2df(fname)
+        elseif file_type in [".csv",".csv.gz"]
+            df = DataFrame(CSV.File(fname))
+        end
     else
-        res = HTTP.get(url * string(seasons) *  ".parquet")
-        ds = Parquet2.Dataset(res.body)
-        df = DataFrame(ds)
+        if file_type == ".parquet"
+            res = HTTP.get(url * string(seasons) *  ".parquet")
+            ds = Parquet2.Dataset(res.body)
+            df = DataFrame(ds)
+        elseif file_type in [".csv",".csv.gz"]
+            df = DataFrame(CSV.File(fname))
+        end
     end 
     return df
 end
@@ -149,7 +174,7 @@ end
 
 # load contract data
 function load_contracts()
-    return from_url("https://github.com/nflverse/nflverse-data/releases/download/contracts/historical_contracts")
+    return from_url("https://github.com/nflverse/nflverse-data/releases/download/contracts/historical_contracts",file_type=".csv.gz")
 end
 
 # load depth charts
@@ -178,31 +203,17 @@ function load_draft_picks()
 end
 
 # load espn qb stats
-function load_espn_qbr(seasons = most_recent_season(), summary_type = "season")
-    start_year = 2006
-    if seasons == true
-        seasons = start_year:most_recent_season() 
-    end
-    if minimum(seasons) < start_year
-        throw(DomainError(minimum(seasons),"No ESPN QBR data available prior to $start_year\\!"))
-    elseif minimum(seasons) > most_recent_season() 
-        throw(DomainError(minimum(seasons),"No ESPN QBR data available after $most_recent_season()!"))
-    end
+function load_espn_qbr(summary_type = "season")
     if !(summary_type in ["season","week"])
         throw(DomainError(summary_type,"Please pass in one of \"season\" or \"week\" for the argument `summary_type`!"))
-    end
-    if length(seasons) > 1
-        df = reduce(vcat, from_url.("https://github.com/nflverse/nflverse-data/releases/download/espn_data/qbr_" * summary_type,seasons))
-    else
-        df = from_url("https://github.com/nflverse/nflverse-data/releases/download/espn_data/qbr_" * summary_type,seasons)
-    end
-
+    end 
+    df = from_url("https://github.com/nflverse/nflverse-data/releases/download/espn_data/qbr_$summary_type" * "_level")
     return df
 end
 
 # load fantasy player ids
 function load_ff_playerids()
-    return from_url("https://github.com/dynastyprocess/data/raw/master/files/db_playerids")
+    return from_url("https://github.com/dynastyprocess/data/raw/master/files/db_playerids", file_type = ".csv")
 end
 
 # load latest fantasy player rankings
@@ -211,13 +222,40 @@ function load_ff_rankings(type = "draft")
         throw(DomainError(type,"Please pass in one of \"draft\", \"week\", or \"all\" for the argument `type`!"))
     end
     if type == "draft"
-        df = from_url("https://github.com/dynastyprocess/data/raw/master/files/db_fpecr_latest")
+        df = from_url("https://github.com/dynastyprocess/data/raw/master/files/db_fpecr_latest",file_type = ".csv")
     elseif type == "week"
-        df = from_url("https://github.com/dynastyprocess/data/raw/master/files/fp_latest_weekly")
+        df = from_url("https://github.com/dynastyprocess/data/raw/master/files/fp_latest_weekly",file_type = ".csv")
     elseif type == "all"
-        df = from_url("https://github.com/dynastyprocess/data/raw/master/files/db_fpecr")
+        df = from_url("https://github.com/dynastyprocess/data/raw/master/files/db_fpecr",file_type = ".csv")
     end
     return df
 end
+
+# load ff opportunity stats
+function load_ff_opportunity(seasons = most_recent_season(), stat_type = "weekly", model_version = "latest")
+    start_year = 2006
+    if seasons == true
+        seasons = start_year:most_recent_season() 
+    end
+    if minimum(seasons) < start_year
+        throw(DomainError(minimum(seasons),"No FF Opportunity data available prior to $start_year\\!"))
+    elseif minimum(seasons) > most_recent_season() 
+        throw(DomainError(minimum(seasons),"No FF Opportunity data available after $most_recent_season()!"))
+    end
+    if !(stat_type in ["weekly","pbp_pass","pbp_rush"])
+        throw(DomainError(stat_type,"Please pass in one of \"weekly\",\"pbp_pass\",\"pbp_rush\" for the argument `stat_type`!"))
+    end
+    if !(model_version in ["latest","v1.0.0"])
+        throw(DomainError(stat_type,"Please pass in one of \"latest\" or \"v1.0.0\" for the argument `model_version`!"))
+    end
+    if length(seasons) > 1
+        df = reduce(vcat, from_url.("https://github.com/ffverse/ffopportunity/releases/download/$model_version-data/ep_$stat_type" * "_",seasons))
+    else
+        df = from_url("https://github.com/ffverse/ffopportunity/releases/download/$model_version-data/ep_$stat_type" * "_",seasons)
+    end
+
+    return df
+end
+
 
 end

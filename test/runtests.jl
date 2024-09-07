@@ -11,5 +11,5 @@ using Test
     @test size(load_espn_qbr())[1] > 0
     @test size(load_ff_playerids())[1] > 0
     @test size(load_ff_rankings())[1] > 0
-    @test size(most_recent_season())[1] > 0
+    @test size(load_ff_opportunity())[1] > 0
 end
