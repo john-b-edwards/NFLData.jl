@@ -112,6 +112,9 @@ function load_pbp(seasons = most_recent_season())
     elseif minimum(seasons) > most_recent_season() 
         throw(DomainError(minimum(seasons),"No PBP data available after $most_recent_season()!"))
     end
+    if seasons == true
+        seasons = 1999:most_recent_season() 
+    end
     if length(seasons) > 1
         df = reduce(vcat, from_url.("https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_",seasons))
     else
@@ -133,6 +136,9 @@ function load_depth_charts(seasons = most_recent_season())
     elseif minimum(seasons) > most_recent_season() 
         throw(DomainError(minimum(seasons),"No PBP data available after $most_recent_season()!"))
     end
+    if seasons == true
+        seasons = 1999:most_recent_season() 
+    end
     if length(seasons) > 1
         df = reduce(vcat, from_url.("https://github.com/nflverse/nflverse-data/releases/download/depth_charts/depth_charts_",seasons))
     else
@@ -141,5 +147,7 @@ function load_depth_charts(seasons = most_recent_season())
 
     return df
 end
+
+
 
 end
