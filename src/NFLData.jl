@@ -1,9 +1,9 @@
 module NFLData
 
-using CSV
 using Preferences
 using DataFrames
-using UrlDownload: urldownload
+using Parquet2
+using HTTP
 using Scratch: @get_scratch!, clear_scratchspaces!
 using Dates
 
@@ -71,16 +71,29 @@ function most_recent_season(roster::Bool = false)
     return most_rec
 end
 
+# parquet2 helper function so we can open and close parquet files while still clearing the cache
+function parquet2df(file)
+    open(file) do io
+        ds = Parquet2.Dataset(io)
+        df = DataFrame(ds)
+        close(ds)
+        return df
+    end
+end
+
+
 # Downloads a resource, stores it within a scratchspace
 function from_url(url::String)
     if cache_data
-        fname = joinpath(download_cache, basename(url) * ".csv.gz")
+        fname = joinpath(download_cache, basename(url) * ".parquet")
         if !isfile(fname)
-            download(url * ".csv.gz", fname)
+            download(url * ".parquet", fname)
         end
-        df = DataFrame(CSV.File(fname))
+        df = parquet2df(fname)
     else
-        df = DataFrame(urldownload(url * ".csv.gz"))
+        res = HTTP.get(url * ".parquet")
+        ds = Parquet2.Dataset(res.body)
+        df = DataFrame(ds)
     end 
     return df
 end
@@ -89,13 +102,15 @@ end
 # can be broadcasted e.g. from_url.(url,2022:2024)
 function from_url(url::String, seasons::Int)
     if cache_data
-        fname = joinpath(download_cache, basename(url) * string(seasons) * ".csv.gz")
+        fname = joinpath(download_cache, basename(url) * string(seasons) * ".parquet")
         if !isfile(fname)
-            download(url * string(seasons) * ".csv.gz", fname)
+            download(url * string(seasons) * ".parquet", fname)
         end
-        df = DataFrame(CSV.File(fname))
+        df = parquet2df(fname)
     else
-        df = DataFrame(urldownload(url * string(seasons) * ".csv.gz"))
+        res = HTTP.get(url * string(seasons) *  ".parquet")
+        ds = Parquet2.Dataset(res.body)
+        df = DataFrame(ds)
     end 
     return df
 end
@@ -178,7 +193,7 @@ function load_espn_qbr(seasons = most_recent_season(), summary_type = "season")
     return df
 end
 
-# load fantasy player ids
+#= # load fantasy player ids
 function load_ff_playerids()
     return DataFrame(urldownload("https://github.com/dynastyprocess/data/raw/master/files/db_playerids.csv"))
 end
@@ -221,6 +236,6 @@ function load_ff_opportunity(seasons = most_recent_season(), summary_type = "wee
     end
 
     return df
-end
+end =#
 
 end
