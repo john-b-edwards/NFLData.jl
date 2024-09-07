@@ -127,7 +127,7 @@ function load_contracts()
 end
 
 # load depth charts
-function load_pbp(seasons = most_recent_season())
+function load_depth_charts(seasons = most_recent_season())
     if minimum(seasons) < 2001
         throw(DomainError(minimum(seasons),"No depth charts available prior to 2001!"))
     elseif minimum(seasons) > most_recent_season() 
