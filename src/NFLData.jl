@@ -25,6 +25,7 @@ export most_recent_season
 export load_nextgen_stats
 export load_officials
 export load_participation
+export load_pfr_advstats
 export clear_cache
 
 ## PREFERENCES
@@ -291,7 +292,7 @@ end
 
 # load participation data for nfl games
 function load_participation(seasons, include_pbp = false)
-    seasons = check_years(seasons, 2016, "NFL participatin data")
+    seasons = check_years(seasons, 2016, "NFL participation data")
     if length(seasons) > 1
         df = reduce(vcat, from_url.("https://github.com/nflverse/nflverse-data/releases/download/pbp_participation/pbp_participation_",seasons))
     else
@@ -300,6 +301,17 @@ function load_participation(seasons, include_pbp = false)
     if include_pbp
         df = innerjoin(select!(df, Not([:old_game_id])), load_pbp(seasons), on = [:nflverse_game_id => :game_id, :play_id => :play_id])
     end
+    return df
+end
+
+function load_pfr_advstats(stat_type = "pass", summary_level = "week")
+    if !(stat_type in ["pass","rush","rec","def"])
+        throw(DomainError(stat_type,"Please pass in one of \"pass\",\"rush\",\"rec\", or \"def\" for the argument `stat_type`!"))
+    end
+    if !(summary_level in ["week","season"])
+        throw(DomainError(stat_type,"Please pass in one of \"week\" or \"season"\" for the argument `summary_level`!"))
+    end
+    df = from_url("https://github.com/nflverse/nflverse-data/releases/download/pfr_advstats/advstats_" * summary_level * "_" * stat_type)
     return df
 end
 end
