@@ -20,6 +20,7 @@ export load_ff_playerids
 export load_ff_rankings
 export load_ff_opportunity
 export load_ftn_charting
+export load_injuries
 export most_recent_season
 export clear_cache
 
@@ -58,7 +59,7 @@ end
 
 ## UTILITIES
 # helper function, throws an error in case data is unavailable
-function check_years(years_to_check, start_year, release, roster = F)
+function check_years(years_to_check, start_year, release, roster = false)
     most_rec_sea = most_recent_season(roster) 
     if years_to_check == true
         years_to_check = start_year:most_recent_season() 
@@ -87,7 +88,9 @@ end
 function most_recent_season(roster::Bool = false)
     labor_day = compute_labor_day(year(today()))
     season_opener = labor_day + Day(3)
-    if (!roster && today() >= season_opener) || (roster && month(today()) == 3 && day(today()) >= 15) || (roster && month(today) >= 3)
+    if (!roster && (today() >= season_opener)) || 
+        (roster && (month(today()) == 3) && (day(today()) >= 15)) || 
+        (roster && (month(today()) >= 3))
         most_rec = year(today())
     else
         most_rec = year(today()) - 1
@@ -251,11 +254,21 @@ end
 function load_ftn_charting(seasons = most_recent_season())
     seasons = check_years(seasons, 2022, "FTN charting data")
     if length(seasons) > 1
-        df = reduce(vcat, from_url.("https://github.com/nflverse/nflverse-data/releases/download/depth_charts/depth_charts_",seasons))
+        df = reduce(vcat, from_url.("https://github.com/nflverse/nflverse-data/releases/download/ftn_charting/ftn_charting_",seasons))
     else
-        df = from_url("https://github.com/nflverse/nflverse-data/releases/download/depth_charts/depth_charts_",seasons)
+        df = from_url("https://github.com/nflverse/nflverse-data/releases/download/ftn_charting/ftn_charting_",seasons)
     end
+    return df
+end
 
+# load injury data
+function load_injuries(seasons = most_recent_season())
+    seasons = check_years(seasons, 2009, "NFL injury data", true)
+    if length(seasons) > 1
+        df = reduce(vcat, from_url.("https://github.com/nflverse/nflverse-data/releases/download/injuries/injuries_",seasons))
+    else
+        df = from_url("https://github.com/nflverse/nflverse-data/releases/download/injuries/injuries_",seasons)
+    end
     return df
 end
 
