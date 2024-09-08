@@ -16,4 +16,5 @@ using Test
     @test size(load_injuries(2023))[1] > 0
     @test size(load_nextgen_stats())[1] > 0
     @test size(load_officials())[1] > 0
+    @test size(load_participation(2023))[1] > 0
 end

@@ -24,6 +24,7 @@ export load_injuries
 export most_recent_season
 export load_nextgen_stats
 export load_officials
+export load_participation
 export clear_cache
 
 ## PREFERENCES
@@ -288,4 +289,17 @@ function load_officials()
     return from_url("https://github.com/nflverse/nflverse-data/releases/download/officials/officials")
 end
 
+# load participation data for nfl games
+function load_participation(seasons, include_pbp = false)
+    seasons = check_years(seasons, 2016, "NFL participatin data")
+    if length(seasons) > 1
+        df = reduce(vcat, from_url.("https://github.com/nflverse/nflverse-data/releases/download/pbp_participation/pbp_participation_",seasons))
+    else
+        df = from_url("https://github.com/nflverse/nflverse-data/releases/download/pbp_participation/pbp_participation_",seasons)
+    end
+    if include_pbp
+        df = innerjoin(select!(df, Not([:old_game_id])), load_pbp(seasons), on = [:nflverse_game_id => :game_id, :play_id => :play_id])
+    end
+    return df
+end
 end
