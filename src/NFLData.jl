@@ -23,6 +23,7 @@ export load_ftn_charting
 export load_injuries
 export most_recent_season
 export load_nextgen_stats
+export load_officials
 export clear_cache
 
 ## PREFERENCES
@@ -280,6 +281,11 @@ function load_nextgen_stats(stat_type = "passing")
     end
     df = from_url("https://github.com/nflverse/nflverse-data/releases/download/nextgen_stats/ngs_$stat_type")
     return df
+end
+
+# load officiating data for nfl games
+function load_officials()
+    return from_url("https://github.com/nflverse/nflverse-data/releases/download/officials/officials")
 end
 
 end
