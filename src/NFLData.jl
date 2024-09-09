@@ -43,6 +43,7 @@ end
 
 function clear_cache()
     clear_scratchspaces!(NFLData)
+    global download_cache = @get_scratch!("downloaded_files");
 end
 
 const cache_data = @load_preference("cache", true)
