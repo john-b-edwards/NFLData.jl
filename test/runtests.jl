@@ -72,4 +72,8 @@ using Test
     @test size(load_snap_counts(2023))[1] > 0
     @test size(load_snap_counts())[1] > 0
     @test size(load_snap_counts(2022:2023))[1] > 0
+    # load teams tests
+    @test size(load_teams())[1] > 0
+    # load trades tests
+    @test size(load_trades())[1] > 0
 end

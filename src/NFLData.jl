@@ -31,6 +31,8 @@ export load_rosters
 export load_rosters_weekly
 export load_schedules
 export load_snap_counts
+export load_teams
+export load_trades
 export clear_cache
 
 ## PREFERENCES
@@ -350,6 +352,19 @@ function load_snap_counts(seasons = most_recent_season())
     seasons = check_years(seasons, 2012, "NFL snap counts")
     df = reduce(vcat, from_url.("https://github.com/nflverse/nflverse-data/releases/download/snap_counts/snap_counts_", seasons))
     return df
+end
+
+function load_teams(current = true)
+    df = from_url("https://github.com/nflverse/nflverse-pbp/raw/master/teams_colors_logos",file_type = ".csv")
+    if current
+# TODO out <- out[out$team_abbr %in% nflreadr::team_abbr_mapping,]
+    end
+    return df
+end
+
+function load_trades()
+    df = from_url("https://github.com/nflverse/nfldata/raw/master/data/trades",file_type = ".csv")
+    return(df)
 end
 
 end
