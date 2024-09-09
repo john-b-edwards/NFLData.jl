@@ -225,7 +225,7 @@ function load_ff_rankings(type = "draft")
     elseif type == "week"
         df = from_url("https://github.com/dynastyprocess/data/raw/master/files/fp_latest_weekly",file_type = ".csv")
     elseif type == "all"
-        df = from_url("https://github.com/dynastyprocess/data/raw/master/files/db_fpecr",file_type = ".csv")
+        df = from_url("https://github.com/dynastyprocess/data/raw/master/files/db_fpecr")
     end
     return df
 end
@@ -272,17 +272,22 @@ function load_officials()
 end
 
 # load participation data for nfl games
-function load_participation(seasons, include_pbp = false)
+function load_participation(seasons = 2023, include_pbp = false)
     seasons = check_years(seasons, 2016, "NFL participation data")
+    if maximum(seasons) > 2023
+        throw(DomainError(maximum(seasons),"The NFL has ceased to provide participation data for any games following the 2023 season."))
+    end
     df = reduce(vcat, from_url.("https://github.com/nflverse/nflverse-data/releases/download/pbp_participation/pbp_participation_",seasons))
     if include_pbp
-        df = innerjoin(select!(df, Not([:old_game_id])), load_pbp(seasons), on = [:nflverse_game_id => :game_id, :play_id => :play_id])
+        pbp = reduce(vcat, load_pbp.(seasons))
+        df = select(df, Not([:old_game_id]))
+        df = innerjoin(df, pbp, on = [:nflverse_game_id => :game_id, :play_id => :play_id])
     end
     return df
 end
 
 # load pfr advanced stats
-function load_pfr_advstats(seasons, stat_type = "pass", summary_level = "week")
+function load_pfr_advstats(seasons = most_recent_season(), stat_type = "pass", summary_level = "week")
     seasons = check_years(seasons, 2018, "PFR advanced stats")
     if !(stat_type in ["pass","rush","rec","def"])
         throw(DomainError(stat_type,"Please pass in one of \"pass\",\"rush\",\"rec\", or \"def\" for the argument `stat_type`!"))
