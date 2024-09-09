@@ -30,6 +30,7 @@ export load_player_stats
 export load_rosters
 export load_rosters_weekly
 export load_schedules
+export load_snap_counts
 export clear_cache
 
 ## PREFERENCES
@@ -340,6 +341,14 @@ end
 # load schedules
 function load_schedules()
     df = from_url("https://github.com/nflverse/nfldata/raw/master/data/games",file_type=".csv")
+    df.roof = ifelse.(in.(df.roof, [["closed", "dome", "outdoors", "open", "retractable"]]), df.roof, missing)
+    return df
+end
+
+# load snap counts
+function load_snap_counts(seasons = most_recent_season())
+    seasons = check_years(seasons, 2012, "NFL snap counts")
+    df = reduce(vcat, from_url.("https://github.com/nflverse/nflverse-data/releases/download/snap_counts/snap_counts_", seasons))
     return df
 end
 

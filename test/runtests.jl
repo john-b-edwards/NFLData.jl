@@ -68,4 +68,8 @@ using Test
     @test size(load_rosters_weekly(2022:2023))[1] > 0
     # load schedules tests
     @test size(load_schedules())[1] > 0
+    # load snap count tests
+    @test size(load_snap_counts(2023))[1] > 0
+    @test size(load_snap_counts())[1] > 0
+    @test size(load_snap_counts(2022:2023))[1] > 0
 end
