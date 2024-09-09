@@ -18,4 +18,5 @@ using Test
     @test size(load_officials())[1] > 0
     @test size(load_participation(2023, true))[1] > 0
     @test size(load_pfr_advstats())[1] > 0
+    @test size(load_player_stats())[1] > 0
 end

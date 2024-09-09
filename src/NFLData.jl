@@ -26,6 +26,7 @@ export load_nextgen_stats
 export load_officials
 export load_participation
 export load_pfr_advstats
+export load_player_stats
 export clear_cache
 
 ## PREFERENCES
@@ -64,14 +65,17 @@ end
 ## UTILITIES
 # helper function, throws an error in case data is unavailable
 function check_years(years_to_check, start_year, release, roster = false)
-    most_rec_sea = most_recent_season(roster) 
+    most_rec_sea = 2024
     if years_to_check == true
-        years_to_check = start_year:most_recent_season() 
+        years_to_check = start_year:most_rec_sea
     end
     if minimum(years_to_check) < start_year
         throw(DomainError(minimum(years_to_check),"No $release available prior to $start_year\\!"))
     elseif minimum(years_to_check) > most_rec_sea
         throw(DomainError(minimum(years_to_check),"No $release available after $most_rec_sea!"))
+    end
+    if length(years_to_check) == 1
+        years_to_check = [years_to_check]
     end
     return years_to_check
 end
@@ -176,12 +180,7 @@ end
 # load NFLFastR PBP
 function load_pbp(seasons = most_recent_season())
     seasons = check_years(seasons, 1999, "NFL PBP data")
-    if length(seasons) > 1
-        df = reduce(vcat, from_url.("https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_",seasons))
-    else
-        df = from_url("https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_",seasons)
-    end
-
+    df = reduce(vcat, from_url.("https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_",seasons))
     return df
 end
 
@@ -193,12 +192,7 @@ end
 # load depth charts
 function load_depth_charts(seasons = most_recent_season())
     seasons = check_years(seasons, 2001, "NFL depth charts", true)
-    if length(seasons) > 1
-        df = reduce(vcat, from_url.("https://github.com/nflverse/nflverse-data/releases/download/depth_charts/depth_charts_",seasons))
-    else
-        df = from_url("https://github.com/nflverse/nflverse-data/releases/download/depth_charts/depth_charts_",seasons)
-    end
-
+    df = reduce(vcat, from_url.("https://github.com/nflverse/nflverse-data/releases/download/depth_charts/depth_charts_",seasons))
     return df
 end
 
@@ -245,34 +239,21 @@ function load_ff_opportunity(seasons = most_recent_season(), stat_type = "weekly
     if !(model_version in ["latest","v1.0.0"])
         throw(DomainError(stat_type,"Please pass in one of \"latest\" or \"v1.0.0\" for the argument `model_version`!"))
     end
-    if length(seasons) > 1
-        df = reduce(vcat, from_url.("https://github.com/ffverse/ffopportunity/releases/download/$model_version-data/ep_$stat_type" * "_",seasons))
-    else
-        df = from_url("https://github.com/ffverse/ffopportunity/releases/download/$model_version-data/ep_$stat_type" * "_",seasons)
-    end
-
+    df = reduce(vcat, from_url.("https://github.com/ffverse/ffopportunity/releases/download/$model_version-data/ep_$stat_type" * "_",seasons))
     return df
 end
 
 # load ftn charting data
 function load_ftn_charting(seasons = most_recent_season())
     seasons = check_years(seasons, 2022, "FTN charting data")
-    if length(seasons) > 1
-        df = reduce(vcat, from_url.("https://github.com/nflverse/nflverse-data/releases/download/ftn_charting/ftn_charting_",seasons))
-    else
-        df = from_url("https://github.com/nflverse/nflverse-data/releases/download/ftn_charting/ftn_charting_",seasons)
-    end
+    df = reduce(vcat, from_url.("https://github.com/nflverse/nflverse-data/releases/download/ftn_charting/ftn_charting_",seasons))
     return df
 end
 
 # load injury data
 function load_injuries(seasons = most_recent_season())
     seasons = check_years(seasons, 2009, "NFL injury data", true)
-    if length(seasons) > 1
-        df = reduce(vcat, from_url.("https://github.com/nflverse/nflverse-data/releases/download/injuries/injuries_",seasons))
-    else
-        df = from_url("https://github.com/nflverse/nflverse-data/releases/download/injuries/injuries_",seasons)
-    end
+    df = reduce(vcat, from_url.("https://github.com/nflverse/nflverse-data/releases/download/injuries/injuries_",seasons))
     return df
 end
 
@@ -293,25 +274,45 @@ end
 # load participation data for nfl games
 function load_participation(seasons, include_pbp = false)
     seasons = check_years(seasons, 2016, "NFL participation data")
-    if length(seasons) > 1
-        df = reduce(vcat, from_url.("https://github.com/nflverse/nflverse-data/releases/download/pbp_participation/pbp_participation_",seasons))
-    else
-        df = from_url("https://github.com/nflverse/nflverse-data/releases/download/pbp_participation/pbp_participation_",seasons)
-    end
+    df = reduce(vcat, from_url.("https://github.com/nflverse/nflverse-data/releases/download/pbp_participation/pbp_participation_",seasons))
     if include_pbp
         df = innerjoin(select!(df, Not([:old_game_id])), load_pbp(seasons), on = [:nflverse_game_id => :game_id, :play_id => :play_id])
     end
     return df
 end
 
-function load_pfr_advstats(stat_type = "pass", summary_level = "week")
+# load pfr advanced stats
+function load_pfr_advstats(seasons, stat_type = "pass", summary_level = "week")
+    seasons = check_years(seasons, 2018, "PFR advanced stats")
     if !(stat_type in ["pass","rush","rec","def"])
         throw(DomainError(stat_type,"Please pass in one of \"pass\",\"rush\",\"rec\", or \"def\" for the argument `stat_type`!"))
     end
     if !(summary_level in ["week","season"])
         throw(DomainError(stat_type,"Please pass in one of \"week\" or \"season"\" for the argument `summary_level`!"))
     end
-    df = from_url("https://github.com/nflverse/nflverse-data/releases/download/pfr_advstats/advstats_" * summary_level * "_" * stat_type)
+    if summary_level == "season"
+        df = from_url("https://github.com/nflverse/nflverse-data/releases/download/pfr_advstats/advstats_season_$stat_type")
+        df = df[in.(df.season, seasons),:]
+        return df
+    elseif summary_level == "week"
+        df = reduce(vcat, from_url.("https://github.com/nflverse/nflverse-data/releases/download/pfr_advstats/advstats_week_" * stat_type * "_", seasons))
+    end
     return df
 end
+
+# load player stats calculated from pbp
+function load_player_stats(stat_type = "offense")
+    if stat_type == "offense"
+        file_ext = "player_stats"
+    elseif stat_type == "defense"
+        file_ext = "player_stats_def"
+    elseif stat_type == "kicking"
+        file_ext = "player_stats_kicking"
+    else
+        throw(DomainError(stat_type,"Please pass in one of \"offense\", \"defense\", or \"kicking\" for the argument `stat_type`!"))
+    end
+    df = from_url("https://github.com/nflverse/nflverse-data/releases/download/player_stats/$file_ext")
+    return df
+end
+
 end
