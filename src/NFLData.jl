@@ -28,6 +28,8 @@ export load_participation
 export load_pfr_advstats
 export load_player_stats
 export load_rosters
+export load_rosters_weekly
+export load_schedules
 export clear_cache
 
 ## PREFERENCES
@@ -334,4 +336,11 @@ function load_rosters_weekly(seasons = most_recent_season(true))
     df = reduce(vcat, from_url.("https://github.com/nflverse/nflverse-data/releases/download/weekly_rosters/roster_weekly_", seasons))
     return df
 end
+
+# load schedules
+function load_schedules()
+    df = from_url("https://github.com/nflverse/nfldata/raw/master/data/games",file_type=".csv")
+    return df
+end
+
 end

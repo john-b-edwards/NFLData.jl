@@ -66,4 +66,6 @@ using Test
     @test size(load_rosters_weekly(2023))[1] > 0
     @test size(load_rosters_weekly())[1] > 0
     @test size(load_rosters_weekly(2022:2023))[1] > 0
+    # load schedules tests
+    @test size(load_schedules())[1] > 0
 end
