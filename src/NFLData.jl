@@ -327,4 +327,11 @@ function load_rosters(seasons = most_recent_season(true))
     df = reduce(vcat, from_url.("https://github.com/nflverse/nflverse-data/releases/download/rosters/roster_", seasons))
     return df
 end
+
+# load rosters weekly
+function load_rosters_weekly(seasons = most_recent_season(true))
+    seasons = check_years(seasons, 2002, "NFL weekly rosters", true)
+    df = reduce(vcat, from_url.("https://github.com/nflverse/nflverse-data/releases/download/weekly_rosters/roster_weekly_", seasons))
+    return df
+end
 end
