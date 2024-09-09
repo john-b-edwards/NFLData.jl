@@ -57,4 +57,9 @@ using Test
     @test size(load_player_stats())[1] > 0
     @test size(load_player_stats("defense"))[1] > 0
     @test size(load_player_stats("kicking"))[1] > 0
+    # load rosters tests
+    @test size(load_rosters(2023))[1] > 0
+    @test size(load_rosters())[1] > 0
+    @test size(load_rosters(1920))[1] > 0
+    @test size(load_rosters(2022:2023))[1] > 0
 end
