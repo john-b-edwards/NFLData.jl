@@ -15,6 +15,12 @@ Scratch = "6c6a2e73-6563-6170-7368-637461726353"
 
 [compat]
 Preferences = "1"
+DataFrames = "1"
+Scratch = "1"
+HTTP = "1"
+Parquet2 = "0.2"
+CSV = "0.10"
+Downloads = "1"
 julia = "1.6.7"
 
 [extras]
