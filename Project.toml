@@ -14,6 +14,7 @@ Preferences = "21216c6a-2e73-6563-6e65-726566657250"
 Scratch = "6c6a2e73-6563-6170-7368-637461726353"
 
 [compat]
+HTTP = "1"
 Parquet2 = "0.2"
 CSV = "0.10"
 Downloads = "1"
