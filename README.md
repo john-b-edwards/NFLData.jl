@@ -35,13 +35,19 @@ To clear the cache, run `clear_cache()`.
 
 julia> load_teams()
 36×16 DataFrame
- Row │ team_abbr  team_name              team_id  team_nick   team_conf  team_division  team_color  team_color2  team_color3  team_color4  team_log ⋯     │ String3    String31               Int64    String15    String3    String15       String7     String7      String7      String7      String   ⋯─────┼───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────   1 │ ARI        Arizona Cardinals         3800  Cardinals   NFC        NFC West       #97233F     #000000      #ffb612      #a5acaf      https:// ⋯   2 │ ATL        Atlanta Falcons            200  Falcons     NFC        NFC South      #A71930     #000000      #a5acaf      #a30d2d      https://  
+ Row │ team_abbr  team_name              team_id  team_nick   team_conf  team_division  team_color  team_color2  team_color3  team_color4  team_log ⋯
+     │ String3    String31               Int64    String15    String3    String15       String7     String7      String7      String7      String   ⋯─────┼───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+   1 │ ARI        Arizona Cardinals         3800  Cardinals   NFC        NFC West       #97233F     #000000      #ffb612      #a5acaf      https:// ⋯
+   2 │ ATL        Atlanta Falcons            200  Falcons     NFC        NFC South      #A71930     #000000      #a5acaf      #a30d2d      https://  
    3 │ BAL        Baltimore Ravens           325  Ravens      AFC        AFC North      #241773     #9E7C0C      #9e7c0c      #c60c30      https://  
    4 │ BUF        Buffalo Bills              610  Bills       AFC        AFC East       #00338D     #C60C30      #0c2e82      #d50a0a      https://  
-   5 │ CAR        Carolina Panthers          750  Panthers    NFC        NFC South      #0085CA     #000000      #bfc0bf      #0085ca      https:// ⋯   6 │ CHI        Chicago Bears              810  Bears       NFC        NFC North      #0B162A     #E64100      #0b162a      #E64100      https://  
+   5 │ CAR        Carolina Panthers          750  Panthers    NFC        NFC South      #0085CA     #000000      #bfc0bf      #0085ca      https:// ⋯
+   6 │ CHI        Chicago Bears              810  Bears       NFC        NFC North      #0B162A     #E64100      #0b162a      #E64100      https://  
    7 │ CIN        Cincinnati Bengals         920  Bengals     AFC        AFC North      #FB4F14     #000000      #000000      #d32f1e      https://  
-  ⋮  │     ⋮                ⋮               ⋮         ⋮           ⋮            ⋮            ⋮            ⋮            ⋮            ⋮                ⋱  31 │ SEA        Seattle Seahawks          4600  Seahawks    NFC        NFC West       #002244     #69be28      #a5acaf      #001532      https://  
-  32 │ SF         San Francisco 49ers       4500  49ers       NFC        NFC West       #AA0000     #B3995D      #000000      #a5acaf      https:// ⋯  33 │ STL        St. Louis Rams            2510  Rams        NFC        NFC West       #003594     #FFD100      #001532      #af925d      https://  
+  ⋮  │     ⋮                ⋮               ⋮         ⋮           ⋮            ⋮            ⋮            ⋮            ⋮            ⋮                ⋱
+  31 │ SEA        Seattle Seahawks          4600  Seahawks    NFC        NFC West       #002244     #69be28      #a5acaf      #001532      https://  
+  32 │ SF         San Francisco 49ers       4500  49ers       NFC        NFC West       #AA0000     #B3995D      #000000      #a5acaf      https:// ⋯
+  33 │ STL        St. Louis Rams            2510  Rams        NFC        NFC West       #003594     #FFD100      #001532      #af925d      https://  
   34 │ TB         Tampa Bay Buccaneers      4900  Buccaneers  NFC        NFC South      #A71930     #322F2B      #000000      #ff7900      https://  
   35 │ TEN        Tennessee Titans          2100  Titans      AFC        AFC South      #002244     #4B92DB      #c60c30      #a5acaf      https://  
   36 │ WAS        Washington Commanders     5110  Commanders  NFC        NFC East       #5A1414     #FFB612      #000000      #5b2b2f      https:// ⋯                                                                                                                        6 columns and 23 rows omitted
@@ -52,13 +58,19 @@ julia> load_teams()
   ```
   julia> load_pbp(2023)
 49665×372 DataFrame
-   Row │ play_id   game_id          old_game_id  home_team  away_team  season_type  week    posteam  posteam_type  defteam  side_of_field  yardline ⋯       │ Float64?  String?          String?      String?    String?    String?      Int32?  String?  String?       String?  String?        Float64? ⋯───────┼─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────     1 │      1.0  2023_01_ARI_WAS  2023091007   WAS        ARI        REG               1  missing  missing       missing  missing           missi ⋯     2 │     39.0  2023_01_ARI_WAS  2023091007   WAS        ARI        REG               1  WAS      home          ARI      ARI
+   Row │ play_id   game_id          old_game_id  home_team  away_team  season_type  week    posteam  posteam_type  defteam  side_of_field  yardline ⋯
+       │ Float64?  String?          String?      String?    String?    String?      Int32?  String?  String?       String?  String?        Float64? ⋯───────┼─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+     1 │      1.0  2023_01_ARI_WAS  2023091007   WAS        ARI        REG               1  missing  missing       missing  missing           missi ⋯
+     2 │     39.0  2023_01_ARI_WAS  2023091007   WAS        ARI        REG               1  WAS      home          ARI      ARI
      3 │     55.0  2023_01_ARI_WAS  2023091007   WAS        ARI        REG               1  WAS      home          ARI      WAS
      4 │     77.0  2023_01_ARI_WAS  2023091007   WAS        ARI        REG               1  WAS      home          ARI      WAS
-     5 │    102.0  2023_01_ARI_WAS  2023091007   WAS        ARI        REG               1  WAS      home          ARI      WAS                     ⋯     6 │    124.0  2023_01_ARI_WAS  2023091007   WAS        ARI        REG               1  WAS      home          ARI      WAS
+     5 │    102.0  2023_01_ARI_WAS  2023091007   WAS        ARI        REG               1  WAS      home          ARI      WAS                     ⋯
+     6 │    124.0  2023_01_ARI_WAS  2023091007   WAS        ARI        REG               1  WAS      home          ARI      WAS
      7 │    147.0  2023_01_ARI_WAS  2023091007   WAS        ARI        REG               1  WAS      home          ARI      WAS
-   ⋮   │    ⋮             ⋮              ⋮           ⋮          ⋮           ⋮         ⋮        ⋮          ⋮           ⋮           ⋮             ⋮   ⋱ 49660 │   4759.0  2023_22_SF_KC    2024021100   KC         SF         POST             22  KC       home          SF       SF
- 49661 │   4791.0  2023_22_SF_KC    2024021100   KC         SF         POST             22  KC       home          SF       SF                      ⋯ 49662 │   4813.0  2023_22_SF_KC    2024021100   KC         SF         POST             22  KC       home          SF       SF
+   ⋮   │    ⋮             ⋮              ⋮           ⋮          ⋮           ⋮         ⋮        ⋮          ⋮           ⋮           ⋮             ⋮   ⋱
+ 49660 │   4759.0  2023_22_SF_KC    2024021100   KC         SF         POST             22  KC       home          SF       SF
+ 49661 │   4791.0  2023_22_SF_KC    2024021100   KC         SF         POST             22  KC       home          SF       SF                      ⋯
+ 49662 │   4813.0  2023_22_SF_KC    2024021100   KC         SF         POST             22  KC       home          SF       SF
  49663 │   4835.0  2023_22_SF_KC    2024021100   KC         SF         POST             22  KC       home          SF       SF
  49664 │   4860.0  2023_22_SF_KC    2024021100   KC         SF         POST             22  KC       home          SF       SF
  49665 │   4881.0  2023_22_SF_KC    2024021100   KC         SF         POST             22  KC       home          SF       missing           missi ⋯                                                                                                                   361 columns and 49652 rows omitted
@@ -69,13 +81,20 @@ julia> load_teams()
  ```
  julia> load_pbp(2022:2023)
 99099×372 DataFrame
-   Row │ play_id   game_id          old_game_id  home_team  away_team  season_type  week    posteam  posteam_type  defteam  side_of_field  yardline ⋯       │ Float64?  String?          String?      String?    String?    String?      Int32?  String?  String?       String?  String?        Float64? ⋯───────┼─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────     1 │      1.0  2022_01_BAL_NYJ  2022091107   NYJ        BAL        REG               1  missing  missing       missing  missing           missi ⋯     2 │     43.0  2022_01_BAL_NYJ  2022091107   NYJ        BAL        REG               1  NYJ      home          BAL      BAL
+   Row │ play_id   game_id          old_game_id  home_team  away_team  season_type  week    posteam  posteam_type  defteam  side_of_field  yardline ⋯
+       │ Float64?  String?          String?      String?    String?    String?      Int32?  String?  String?       String?  String?        Float64? ⋯
+───────┼─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+     1 │      1.0  2022_01_BAL_NYJ  2022091107   NYJ        BAL        REG               1  missing  missing       missing  missing           missi ⋯
+     2 │     43.0  2022_01_BAL_NYJ  2022091107   NYJ        BAL        REG               1  NYJ      home          BAL      BAL
      3 │     68.0  2022_01_BAL_NYJ  2022091107   NYJ        BAL        REG               1  NYJ      home          BAL      NYJ
      4 │     89.0  2022_01_BAL_NYJ  2022091107   NYJ        BAL        REG               1  NYJ      home          BAL      NYJ
-     5 │    115.0  2022_01_BAL_NYJ  2022091107   NYJ        BAL        REG               1  NYJ      home          BAL      NYJ                     ⋯     6 │    136.0  2022_01_BAL_NYJ  2022091107   NYJ        BAL        REG               1  NYJ      home          BAL      NYJ
+     5 │    115.0  2022_01_BAL_NYJ  2022091107   NYJ        BAL        REG               1  NYJ      home          BAL      NYJ                     ⋯
+     6 │    136.0  2022_01_BAL_NYJ  2022091107   NYJ        BAL        REG               1  NYJ      home          BAL      NYJ
      7 │    172.0  2022_01_BAL_NYJ  2022091107   NYJ        BAL        REG               1  NYJ      home          BAL      NYJ
-   ⋮   │    ⋮             ⋮              ⋮           ⋮          ⋮           ⋮         ⋮        ⋮          ⋮           ⋮           ⋮             ⋮   ⋱ 99094 │   4759.0  2023_22_SF_KC    2024021100   KC         SF         POST             22  KC       home          SF       SF
- 99095 │   4791.0  2023_22_SF_KC    2024021100   KC         SF         POST             22  KC       home          SF       SF                      ⋯ 99096 │   4813.0  2023_22_SF_KC    2024021100   KC         SF         POST             22  KC       home          SF       SF
+   ⋮   │    ⋮             ⋮              ⋮           ⋮          ⋮           ⋮         ⋮        ⋮          ⋮           ⋮           ⋮             ⋮   ⋱
+ 99094 │   4759.0  2023_22_SF_KC    2024021100   KC         SF         POST             22  KC       home          SF       SF
+ 99095 │   4791.0  2023_22_SF_KC    2024021100   KC         SF         POST             22  KC       home          SF       SF                      ⋯
+ 99096 │   4813.0  2023_22_SF_KC    2024021100   KC         SF         POST             22  KC       home          SF       SF
  99097 │   4835.0  2023_22_SF_KC    2024021100   KC         SF         POST             22  KC       home          SF       SF
  99098 │   4860.0  2023_22_SF_KC    2024021100   KC         SF         POST             22  KC       home          SF       SF
  99099 │   4881.0  2023_22_SF_KC    2024021100   KC         SF         POST             22  KC       home          SF       missing           missi ⋯                                                                                                                   361 columns and 99086 rows omitted
@@ -86,13 +105,19 @@ julia> load_teams()
  ```
  julia> load_pbp(true)
 1183941×372 DataFrame
-     Row │ play_id   game_id          old_game_id  home_team  away_team  season_type  week    posteam  posteam_type  defteam  side_of_field  yardli ⋯         │ Float64?  String?          String?      String?    String?    String?      Int32?  String?  String?       String?  String?        Float6 ⋯─────────┼───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────       1 │     35.0  1999_01_ARI_PHI  1999091200   PHI        ARI        REG               1  PHI      home          ARI      ARI                   ⋯       2 │     60.0  1999_01_ARI_PHI  1999091200   PHI        ARI        REG               1  PHI      home          ARI      PHI
+     Row │ play_id   game_id          old_game_id  home_team  away_team  season_type  week    posteam  posteam_type  defteam  side_of_field  yardli ⋯
+         │ Float64?  String?          String?      String?    String?    String?      Int32?  String?  String?       String?  String?        Float6 ⋯─────────┼───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+       1 │     35.0  1999_01_ARI_PHI  1999091200   PHI        ARI        REG               1  PHI      home          ARI      ARI                   ⋯
+       2 │     60.0  1999_01_ARI_PHI  1999091200   PHI        ARI        REG               1  PHI      home          ARI      PHI
        3 │     82.0  1999_01_ARI_PHI  1999091200   PHI        ARI        REG               1  PHI      home          ARI      PHI
        4 │    103.0  1999_01_ARI_PHI  1999091200   PHI        ARI        REG               1  PHI      home          ARI      PHI
-       5 │    126.0  1999_01_ARI_PHI  1999091200   PHI        ARI        REG               1  PHI      home          ARI      PHI                   ⋯       6 │    150.0  1999_01_ARI_PHI  1999091200   PHI        ARI        REG               1  PHI      home          ARI      PHI
+       5 │    126.0  1999_01_ARI_PHI  1999091200   PHI        ARI        REG               1  PHI      home          ARI      PHI                   ⋯
+       6 │    150.0  1999_01_ARI_PHI  1999091200   PHI        ARI        REG               1  PHI      home          ARI      PHI
        7 │    176.0  1999_01_ARI_PHI  1999091200   PHI        ARI        REG               1  ARI      away          PHI      ARI
-    ⋮    │    ⋮             ⋮              ⋮           ⋮          ⋮           ⋮         ⋮        ⋮          ⋮           ⋮           ⋮             ⋮ ⋱ 1183936 │   3939.0  2024_01_WAS_TB   2024090811   TB         WAS        REG               1  WAS      away          TB       TB
- 1183937 │   3969.0  2024_01_WAS_TB   2024090811   TB         WAS        REG               1  WAS      away          TB       TB                    ⋯ 1183938 │   3982.0  2024_01_WAS_TB   2024090811   TB         WAS        REG               1  TB       home          WAS      WAS
+    ⋮    │    ⋮             ⋮              ⋮           ⋮          ⋮           ⋮         ⋮        ⋮          ⋮           ⋮           ⋮             ⋮ ⋱
+ 1183936 │   3939.0  2024_01_WAS_TB   2024090811   TB         WAS        REG               1  WAS      away          TB       TB
+ 1183937 │   3969.0  2024_01_WAS_TB   2024090811   TB         WAS        REG               1  WAS      away          TB       TB                    ⋯
+ 1183938 │   3982.0  2024_01_WAS_TB   2024090811   TB         WAS        REG               1  TB       home          WAS      WAS
  1183939 │   4005.0  2024_01_WAS_TB   2024090811   TB         WAS        REG               1  TB       home          WAS      WAS
  1183940 │   4027.0  2024_01_WAS_TB   2024090811   TB         WAS        REG               1  TB       home          WAS      WAS
  1183941 │   4049.0  2024_01_WAS_TB   2024090811   TB         WAS        REG               1  TB       home          WAS      missing           mis ⋯                                                                                                                 361 columns and 1183928 rows omitted
@@ -103,13 +128,19 @@ By default, if _no_ argument is passed to a function that queries a data resourc
 ```
 julia> load_pbp()
 2578×372 DataFrame
-  Row │ play_id   game_id          old_game_id  home_team  away_team  season_type  week    posteam  posteam_type  defteam  side_of_field  yardline_ ⋯      │ Float64?  String?          String?      String?    String?    String?      Int32?  String?  String?       String?  String?        Float64?  ⋯──────┼──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────    1 │      1.0  2024_01_ARI_BUF  2024090801   BUF        ARI        REG               1  missing  missing       missing  missing           missin ⋯    2 │     40.0  2024_01_ARI_BUF  2024090801   BUF        ARI        REG               1  ARI      away          BUF      BUF                    3  
+  Row │ play_id   game_id          old_game_id  home_team  away_team  season_type  week    posteam  posteam_type  defteam  side_of_field  yardline_ ⋯
+      │ Float64?  String?          String?      String?    String?    String?      Int32?  String?  String?       String?  String?        Float64?  ⋯──────┼──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+    1 │      1.0  2024_01_ARI_BUF  2024090801   BUF        ARI        REG               1  missing  missing       missing  missing           missin ⋯
+    2 │     40.0  2024_01_ARI_BUF  2024090801   BUF        ARI        REG               1  ARI      away          BUF      BUF                    3  
     3 │     61.0  2024_01_ARI_BUF  2024090801   BUF        ARI        REG               1  ARI      away          BUF      ARI                    7  
     4 │     83.0  2024_01_ARI_BUF  2024090801   BUF        ARI        REG               1  ARI      away          BUF      ARI                    6  
-    5 │    108.0  2024_01_ARI_BUF  2024090801   BUF        ARI        REG               1  ARI      away          BUF      BUF                    4 ⋯    6 │    133.0  2024_01_ARI_BUF  2024090801   BUF        ARI        REG               1  ARI      away          BUF      BUF                    3  
+    5 │    108.0  2024_01_ARI_BUF  2024090801   BUF        ARI        REG               1  ARI      away          BUF      BUF                    4 ⋯
+    6 │    133.0  2024_01_ARI_BUF  2024090801   BUF        ARI        REG               1  ARI      away          BUF      BUF                    3  
     7 │    155.0  2024_01_ARI_BUF  2024090801   BUF        ARI        REG               1  ARI      away          BUF      BUF                    3  
-  ⋮   │    ⋮             ⋮              ⋮           ⋮          ⋮           ⋮         ⋮        ⋮          ⋮           ⋮           ⋮             ⋮    ⋱ 2573 │   3939.0  2024_01_WAS_TB   2024090811   TB         WAS        REG               1  WAS      away          TB       TB
- 2574 │   3969.0  2024_01_WAS_TB   2024090811   TB         WAS        REG               1  WAS      away          TB       TB                       ⋯ 2575 │   3982.0  2024_01_WAS_TB   2024090811   TB         WAS        REG               1  TB       home          WAS      WAS                    3  
+  ⋮   │    ⋮             ⋮              ⋮           ⋮          ⋮           ⋮         ⋮        ⋮          ⋮           ⋮           ⋮             ⋮    ⋱
+ 2573 │   3939.0  2024_01_WAS_TB   2024090811   TB         WAS        REG               1  WAS      away          TB       TB
+ 2574 │   3969.0  2024_01_WAS_TB   2024090811   TB         WAS        REG               1  WAS      away          TB       TB                       ⋯
+ 2575 │   3982.0  2024_01_WAS_TB   2024090811   TB         WAS        REG               1  TB       home          WAS      WAS                    3  
  2576 │   4005.0  2024_01_WAS_TB   2024090811   TB         WAS        REG               1  TB       home          WAS      WAS                    4  
  2577 │   4027.0  2024_01_WAS_TB   2024090811   TB         WAS        REG               1  TB       home          WAS      WAS                    4  
  2578 │   4049.0  2024_01_WAS_TB   2024090811   TB         WAS        REG               1  TB       home          WAS      missing           missin ⋯                                                                                                                    361 columns and 2565 rows omitted
