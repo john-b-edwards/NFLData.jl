@@ -1,13 +1,13 @@
 # NFLData
 
-[![CI](https://github.com/john-b-edwards/NFLData.jl/actions/workflows/CI.yml/badge.svg)](https://github.com/john-b-edwards/NFLData.jl/actions/workflows/CI.yml)
+[![CI](https://github.com/nflverse/NFLData.jl/actions/workflows/CI.yml/badge.svg)](https://github.com/nflverse/NFLData.jl/actions/workflows/CI.yml)
 
 [![nflverse
 discord](https://img.shields.io/discord/789805604076126219?color=7289da&label=nflverse%20discord&logo=discord&logoColor=fff&style=flat-square)](https://discord.com/invite/5Er2FBnnQa)
 
-`NFLData.jl` is a low level package designed to read football data from the [nflverse](https://nflverse.nflverse.com/) into Julia in a `DataFrame` format. This package can be thought of as the Julia equivalent of the `{nflreadr}` R package. Functions are named identically to existing functions in `{nflreadr}`, (typically) take the same arguments, and should return identical data. This package is built by and mantained by the nflverse organization, primarily @john-b-edwards.
+`NFLData.jl` is a low level package designed to read football data from the [nflverse](https://nflverse.nflverse.com/) into Julia in a `DataFrame` format. This package can be thought of as the Julia equivalent of the `{nflreadr}` R package. Functions are named identically to existing functions in `{nflreadr}`, (typically) take the same arguments, and should return identical data. This package is built by and mantained by the nflverse organization, primarily [@john-b-edwards](https://github.com/john-b-edwards).
 
-This package is currently in development. Functions may not work properly. In the event that you encounter a bug or unexpected error, please [make an issue](https://github.com/john-b-edwards/NFLData.jl/issues/new/choose) and we will attempt to address it.
+This package is currently in development. Functions may not work properly. In the event that you encounter a bug or unexpected error, please [make an issue](https://github.com/nflverse/NFLData.jl/issues/new/choose) and we will attempt to address it.
 
 ## Installation
 
@@ -16,10 +16,10 @@ Eventually, we plan on making `NFLData.jl` available via the Julia package manag
 You can install the package with the following one liner:
 
 ```julia
-using Pkg; Pkg.add("https://github.com/john-b-edwards/NFLData.jl")
+using Pkg; Pkg.add("https://github.com/nflverse/NFLData.jl")
 ```
 
-You can also add the package using the `Pkg.jl` REPL. Open an interactive Julia session, then press `]` to open the REPL, then run `add https://github.com/john-b-edwards/NFLData.jl`.
+You can also add the package using the `Pkg.jl` REPL. Open an interactive Julia session, then press `]` to open the REPL, then run `add https://github.com/nflverse/NFLData.jl`.
 
 ## Usage
 
@@ -203,12 +203,12 @@ As the startup message for `NFLData.jl` indicates, you can disable this behavior
 The best places to get help on this package are:
 
 * the [nflverse discord](https://discord.com/invite/5Er2FBnnQa) (for both this package as well as anything R/NFL related)
-* opening [an issue](https://github.com/john-b-edwards/NFLData.jl/issues/new/choose)
+* opening [an issue](https://github.com/nflverse/NFLData.jl/issues/new/choose)
 
 ## Contributing
 Many hands make light work! Here are some ways you can contribute to this project:
 
-* You can [open an issue](https://github.com/john-b-edwards/NFLData.jl/issues/new/choose) if you’d like to request specific data or report a bug/error.
+* You can [open an issue](https://github.com/nflverse/NFLData.jl/issues/new/choose) if you’d like to request specific data or report a bug/error.
 
 ## Terms of Use
 This package is released as open source under the MIT License. NFL data accessed by this package belong to their respective owners, and are governed by their terms of use.
