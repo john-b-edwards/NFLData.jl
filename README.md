@@ -36,7 +36,8 @@ To clear the cache, run `clear_cache()`.
 julia> load_teams()
 36×16 DataFrame
  Row │ team_abbr  team_name              team_id  team_nick   team_conf  team_division  team_color  team_color2  team_color3  team_color4  team_log ⋯
-     │ String3    String31               Int64    String15    String3    String15       String7     String7      String7      String7      String   ⋯─────┼───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+     │ String3    String31               Int64    String15    String3    String15       String7     String7      String7      String7      String   ⋯
+─────┼───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
    1 │ ARI        Arizona Cardinals         3800  Cardinals   NFC        NFC West       #97233F     #000000      #ffb612      #a5acaf      https:// ⋯
    2 │ ATL        Atlanta Falcons            200  Falcons     NFC        NFC South      #A71930     #000000      #a5acaf      #a30d2d      https://  
    3 │ BAL        Baltimore Ravens           325  Ravens      AFC        AFC North      #241773     #9E7C0C      #9e7c0c      #c60c30      https://  
@@ -50,7 +51,8 @@ julia> load_teams()
   33 │ STL        St. Louis Rams            2510  Rams        NFC        NFC West       #003594     #FFD100      #001532      #af925d      https://  
   34 │ TB         Tampa Bay Buccaneers      4900  Buccaneers  NFC        NFC South      #A71930     #322F2B      #000000      #ff7900      https://  
   35 │ TEN        Tennessee Titans          2100  Titans      AFC        AFC South      #002244     #4B92DB      #c60c30      #a5acaf      https://  
-  36 │ WAS        Washington Commanders     5110  Commanders  NFC        NFC East       #5A1414     #FFB612      #000000      #5b2b2f      https:// ⋯                                                                                                                        6 columns and 23 rows omitted
+  36 │ WAS        Washington Commanders     5110  Commanders  NFC        NFC East       #5A1414     #FFB612      #000000      #5b2b2f      https:// ⋯
+                                                                                                                        6 columns and 23 rows omitted
   ```
 
   Some functions can query data from specific or multiple years. For example, to load NFLFastR play by play data from 2023, you can run the following:
@@ -59,7 +61,8 @@ julia> load_teams()
   julia> load_pbp(2023)
 49665×372 DataFrame
    Row │ play_id   game_id          old_game_id  home_team  away_team  season_type  week    posteam  posteam_type  defteam  side_of_field  yardline ⋯
-       │ Float64?  String?          String?      String?    String?    String?      Int32?  String?  String?       String?  String?        Float64? ⋯───────┼─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+       │ Float64?  String?          String?      String?    String?    String?      Int32?  String?  String?       String?  String?        Float64? ⋯
+───────┼─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
      1 │      1.0  2023_01_ARI_WAS  2023091007   WAS        ARI        REG               1  missing  missing       missing  missing           missi ⋯
      2 │     39.0  2023_01_ARI_WAS  2023091007   WAS        ARI        REG               1  WAS      home          ARI      ARI
      3 │     55.0  2023_01_ARI_WAS  2023091007   WAS        ARI        REG               1  WAS      home          ARI      WAS
@@ -73,7 +76,8 @@ julia> load_teams()
  49662 │   4813.0  2023_22_SF_KC    2024021100   KC         SF         POST             22  KC       home          SF       SF
  49663 │   4835.0  2023_22_SF_KC    2024021100   KC         SF         POST             22  KC       home          SF       SF
  49664 │   4860.0  2023_22_SF_KC    2024021100   KC         SF         POST             22  KC       home          SF       SF
- 49665 │   4881.0  2023_22_SF_KC    2024021100   KC         SF         POST             22  KC       home          SF       missing           missi ⋯                                                                                                                   361 columns and 49652 rows omitted
+ 49665 │   4881.0  2023_22_SF_KC    2024021100   KC         SF         POST             22  KC       home          SF       missing           missi ⋯
+                                                                                                                   361 columns and 49652 rows omitted
  ```
 
  To load data from multiple seasons, pass in either a `Vector` or `UnitRange` of seasons. For example, to load PBP data from 2022 and 2023:
@@ -97,7 +101,8 @@ julia> load_teams()
  99096 │   4813.0  2023_22_SF_KC    2024021100   KC         SF         POST             22  KC       home          SF       SF
  99097 │   4835.0  2023_22_SF_KC    2024021100   KC         SF         POST             22  KC       home          SF       SF
  99098 │   4860.0  2023_22_SF_KC    2024021100   KC         SF         POST             22  KC       home          SF       SF
- 99099 │   4881.0  2023_22_SF_KC    2024021100   KC         SF         POST             22  KC       home          SF       missing           missi ⋯                                                                                                                   361 columns and 99086 rows omitted
+ 99099 │   4881.0  2023_22_SF_KC    2024021100   KC         SF         POST             22  KC       home          SF       missing           missi ⋯
+                                                                                                                  361 columns and 99086 rows omitted
  ```
 
  To load all seasons available for a given data resource, simply pass `true` as an argument to the function.
@@ -106,7 +111,8 @@ julia> load_teams()
  julia> load_pbp(true)
 1183941×372 DataFrame
      Row │ play_id   game_id          old_game_id  home_team  away_team  season_type  week    posteam  posteam_type  defteam  side_of_field  yardli ⋯
-         │ Float64?  String?          String?      String?    String?    String?      Int32?  String?  String?       String?  String?        Float6 ⋯─────────┼───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+         │ Float64?  String?          String?      String?    String?    String?      Int32?  String?  String?       String?  String?        Float6 ⋯
+─────────┼───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
        1 │     35.0  1999_01_ARI_PHI  1999091200   PHI        ARI        REG               1  PHI      home          ARI      ARI                   ⋯
        2 │     60.0  1999_01_ARI_PHI  1999091200   PHI        ARI        REG               1  PHI      home          ARI      PHI
        3 │     82.0  1999_01_ARI_PHI  1999091200   PHI        ARI        REG               1  PHI      home          ARI      PHI
@@ -120,7 +126,8 @@ julia> load_teams()
  1183938 │   3982.0  2024_01_WAS_TB   2024090811   TB         WAS        REG               1  TB       home          WAS      WAS
  1183939 │   4005.0  2024_01_WAS_TB   2024090811   TB         WAS        REG               1  TB       home          WAS      WAS
  1183940 │   4027.0  2024_01_WAS_TB   2024090811   TB         WAS        REG               1  TB       home          WAS      WAS
- 1183941 │   4049.0  2024_01_WAS_TB   2024090811   TB         WAS        REG               1  TB       home          WAS      missing           mis ⋯                                                                                                                 361 columns and 1183928 rows omitted
+ 1183941 │   4049.0  2024_01_WAS_TB   2024090811   TB         WAS        REG               1  TB       home          WAS      missing           mis ⋯
+                                                                                                                 361 columns and 1183928 rows omitted
  ```
 
 By default, if _no_ argument is passed to a function that queries a data resource by season, the most recent season of data is returned.
@@ -129,7 +136,8 @@ By default, if _no_ argument is passed to a function that queries a data resourc
 julia> load_pbp()
 2578×372 DataFrame
   Row │ play_id   game_id          old_game_id  home_team  away_team  season_type  week    posteam  posteam_type  defteam  side_of_field  yardline_ ⋯
-      │ Float64?  String?          String?      String?    String?    String?      Int32?  String?  String?       String?  String?        Float64?  ⋯──────┼──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+      │ Float64?  String?          String?      String?    String?    String?      Int32?  String?  String?       String?  String?        Float64?  ⋯
+──────┼──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
     1 │      1.0  2024_01_ARI_BUF  2024090801   BUF        ARI        REG               1  missing  missing       missing  missing           missin ⋯
     2 │     40.0  2024_01_ARI_BUF  2024090801   BUF        ARI        REG               1  ARI      away          BUF      BUF                    3  
     3 │     61.0  2024_01_ARI_BUF  2024090801   BUF        ARI        REG               1  ARI      away          BUF      ARI                    7  
@@ -143,7 +151,8 @@ julia> load_pbp()
  2575 │   3982.0  2024_01_WAS_TB   2024090811   TB         WAS        REG               1  TB       home          WAS      WAS                    3  
  2576 │   4005.0  2024_01_WAS_TB   2024090811   TB         WAS        REG               1  TB       home          WAS      WAS                    4  
  2577 │   4027.0  2024_01_WAS_TB   2024090811   TB         WAS        REG               1  TB       home          WAS      WAS                    4  
- 2578 │   4049.0  2024_01_WAS_TB   2024090811   TB         WAS        REG               1  TB       home          WAS      missing           missin ⋯                                                                                                                    361 columns and 2565 rows omitted
+ 2578 │   4049.0  2024_01_WAS_TB   2024090811   TB         WAS        REG               1  TB       home          WAS      missing           missin ⋯
+                                                                                                                  361 columns and 2565 rows omitted
 ```
 
 ### Other utilities
