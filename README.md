@@ -175,7 +175,7 @@ julia> @time load_rosters(2023);
 
  ```
 
-However, this caching functionality will also speed up reading in _different_ calls that reference the same object. Notice how calling `load_rosters(2020:2021)` takes 2x longer than `load_rosters(2022:2023)`, because the 2023 roster file has already been donwloaded to the local cache.
+However, this caching functionality will also speed up reading in _different_ calls that reference the same object. Notice how calling `load_rosters(2020:2021)` takes 2x longer than `load_rosters(2022:2023)`, because the 2023 roster file has already been donwloaded to the local cache. This also speeds up calls to cached data objects in other Julia sessions.
 
 ```
 julia> @time load_rosters(2020:2021);
