@@ -164,7 +164,7 @@ julia> most_recent_season()
 ```
 
 ### Caching
-`NFLData.jl` relies on `Scatch.jl` to cache data. In most cases, when a data resource is pulled in, `NFLData.jl` will download the data resource to a local scatch space, then read the file into memory. There is some minor overhead in pulling the data into memory, but subsequent runs referencing these data resources are extraordinarily fast. For functions with identical calls, this is a product of Julia's [Just In Time (JIT) compliation](https://ucidatascienceinitiative.github.io/IntroToJulia/Html/WhyJulia).
+`NFLData.jl` relies on `Scratch.jl` to cache data. In most cases, when a data resource is pulled in, `NFLData.jl` will download the data resource to a local scratch space, then read the file into memory. There is some minor overhead in pulling the data into memory, but subsequent runs referencing these data resources are extraordinarily fast. For functions with identical calls, this is a product of Julia's [Just In Time (JIT) compliation](https://ucidatascienceinitiative.github.io/IntroToJulia/Html/WhyJulia).
 
 ```
 julia> @time load_rosters(2023);
