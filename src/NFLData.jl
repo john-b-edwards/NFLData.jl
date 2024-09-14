@@ -1,7 +1,5 @@
 module NFLData
 
-using Dates
-
 include("helpers.jl")
 using .helpers
 
@@ -19,6 +17,9 @@ using .pbp
 
 include("statsdata.jl")
 using .statsdata
+
+include("gameinfo.jl")
+using .gameinfo
 
 export cache_data_pref
 export load_players
@@ -45,17 +46,5 @@ export load_snap_counts
 export load_teams
 export load_trades
 export clear_cache
-
-# load officiating data for nfl games
-function load_officials()
-    return from_url("https://github.com/nflverse/nflverse-data/releases/download/officials/officials")
-end
-
-# load schedules
-function load_schedules()
-    df = from_url("https://github.com/nflverse/nfldata/raw/master/data/games",file_type=".csv")
-    df.roof = ifelse.(in.(df.roof, [["closed", "dome", "outdoors", "open", "retractable"]]), df.roof, missing)
-    return df
-end
 
 end
