@@ -9,6 +9,9 @@ using Dates
 using Downloads
 using CSV
 
+include("helpers.jl")
+using .helpers
+
 export cache_data_pref
 export load_players
 export load_pbp
@@ -69,50 +72,6 @@ function __init__()
     global download_cache = @get_scratch!("downloaded_files")
 end
 
-## UTILITIES
-# helper function, throws an error in case data is unavailable
-function check_years(years_to_check, start_year, release, roster = false)
-    most_rec_sea = 2024
-    if years_to_check == true
-        years_to_check = start_year:most_rec_sea
-    end
-    if minimum(years_to_check) < start_year
-        throw(DomainError(minimum(years_to_check),"No $release available prior to $start_year\\!"))
-    elseif minimum(years_to_check) > most_rec_sea
-        throw(DomainError(minimum(years_to_check),"No $release available after $most_rec_sea!"))
-    end
-    if length(years_to_check) == 1
-        years_to_check = [years_to_check]
-    end
-    return years_to_check
-end
-
-# helper function for computing start of nfl season
-function compute_labor_day(season::Int)
-    earliest = Dates.firstdayofweek(Date(season,9,1))
-    latest = Dates.firstdayofweek(Date(season,9,8))
-    if(month(earliest) == 8)
-        labor_day = latest
-    else
-        labor_day = earliest
-    end
-    return labor_day
-end
-
-# determine start of nfl season
-function most_recent_season(roster::Bool = false)
-    labor_day = compute_labor_day(year(today()))
-    season_opener = labor_day + Day(3)
-    if (!roster && (today() >= season_opener)) || 
-        (roster && (month(today()) == 3) && (day(today()) >= 15)) || 
-        (roster && (month(today()) >= 3))
-        most_rec = year(today())
-    else
-        most_rec = year(today()) - 1
-    end
-    return most_rec
-end
-
 # parquet2 helper function so we can open and close parquet files while still clearing the cache
 function parquet2df(file)
     open(file) do io
@@ -122,7 +81,6 @@ function parquet2df(file)
         return df
     end
 end
-
 
 # Downloads a resource, stores it within a scratchspace
 function from_url(url::String; file_type::String = ".parquet")
