@@ -1,7 +1,6 @@
 module NFLData
 
 using Dates
-using DataFrames
 
 include("helpers.jl")
 using .helpers
@@ -14,6 +13,9 @@ using .ffverse
 
 include("rosters.jl")
 using .rosters
+
+include("pbp.jl")
+using .pbp
 
 export cache_data_pref
 export load_players
@@ -41,26 +43,12 @@ export load_teams
 export load_trades
 export clear_cache
 
-# load NFLFastR PBP
-function load_pbp(seasons = most_recent_season())
-    seasons = check_years(seasons, 1999, "NFL PBP data")
-    df = reduce(vcat, from_url.("https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_",seasons))
-    return df
-end
-
 # load espn qb stats
 function load_espn_qbr(summary_type = "season")
     if !(summary_type in ["season","week"])
         throw(DomainError(summary_type,"Please pass in one of \"season\" or \"week\" for the argument `summary_type`!"))
     end 
     df = from_url("https://github.com/nflverse/nflverse-data/releases/download/espn_data/qbr_$summary_type" * "_level")
-    return df
-end
-
-# load ftn charting data
-function load_ftn_charting(seasons = most_recent_season())
-    seasons = check_years(seasons, 2022, "FTN charting data")
-    df = reduce(vcat, from_url.("https://github.com/nflverse/nflverse-data/releases/download/ftn_charting/ftn_charting_",seasons))
     return df
 end
 
@@ -79,19 +67,7 @@ function load_officials()
 end
 
 # load participation data for nfl games
-function load_participation(seasons = 2023, include_pbp = false)
-    seasons = check_years(seasons, 2016, "NFL participation data")
-    if maximum(seasons) > 2023
-        throw(DomainError(maximum(seasons),"The NFL has ceased to provide participation data for any games following the 2023 season."))
-    end
-    df = reduce(vcat, from_url.("https://github.com/nflverse/nflverse-data/releases/download/pbp_participation/pbp_participation_",seasons))
-    if include_pbp
-        pbp = reduce(vcat, load_pbp.(seasons))
-        df = select(df, Not([:old_game_id]))
-        df = innerjoin(df, pbp, on = [:nflverse_game_id => :game_id, :play_id => :play_id])
-    end
-    return df
-end
+
 
 # load pfr advanced stats
 function load_pfr_advstats(seasons = most_recent_season(), stat_type = "pass", summary_level = "week")
