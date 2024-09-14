@@ -12,6 +12,9 @@ using .getdata
 include("ffverse.jl")
 using .ffverse
 
+include("rosters.jl")
+using .rosters
+
 export cache_data_pref
 export load_players
 export load_pbp
@@ -38,33 +41,11 @@ export load_teams
 export load_trades
 export clear_cache
 
-# load all NFL players in NFL DB
-function load_players()
-    return from_url("https://github.com/nflverse/nflverse-data/releases/download/players/players")
-end
-
 # load NFLFastR PBP
 function load_pbp(seasons = most_recent_season())
     seasons = check_years(seasons, 1999, "NFL PBP data")
     df = reduce(vcat, from_url.("https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_",seasons))
     return df
-end
-
-# load contract data
-function load_contracts()
-    return from_url("https://github.com/nflverse/nflverse-data/releases/download/contracts/historical_contracts",file_type=".csv.gz")
-end
-
-# load depth charts
-function load_depth_charts(seasons = most_recent_season())
-    seasons = check_years(seasons, 2001, "NFL depth charts", true)
-    df = reduce(vcat, from_url.("https://github.com/nflverse/nflverse-data/releases/download/depth_charts/depth_charts_",seasons))
-    return df
-end
-
-# load draft picks
-function load_draft_picks()
-    return from_url("https://github.com/nflverse/nflverse-data/releases/download/draft_picks/draft_picks")
 end
 
 # load espn qb stats
@@ -80,13 +61,6 @@ end
 function load_ftn_charting(seasons = most_recent_season())
     seasons = check_years(seasons, 2022, "FTN charting data")
     df = reduce(vcat, from_url.("https://github.com/nflverse/nflverse-data/releases/download/ftn_charting/ftn_charting_",seasons))
-    return df
-end
-
-# load injury data
-function load_injuries(seasons = most_recent_season())
-    seasons = check_years(seasons, 2009, "NFL injury data", true)
-    df = reduce(vcat, from_url.("https://github.com/nflverse/nflverse-data/releases/download/injuries/injuries_",seasons))
     return df
 end
 
@@ -153,20 +127,6 @@ function load_player_stats(stat_type = "offense")
     return df
 end
 
-# load rosters
-function load_rosters(seasons = most_recent_season(true))
-    seasons = check_years(seasons, 1920, "NFL rosters", true)
-    df = reduce(vcat, from_url.("https://github.com/nflverse/nflverse-data/releases/download/rosters/roster_", seasons))
-    return df
-end
-
-# load rosters weekly
-function load_rosters_weekly(seasons = most_recent_season(true))
-    seasons = check_years(seasons, 2002, "NFL weekly rosters", true)
-    df = reduce(vcat, from_url.("https://github.com/nflverse/nflverse-data/releases/download/weekly_rosters/roster_weekly_", seasons))
-    return df
-end
-
 # load schedules
 function load_schedules()
     df = from_url("https://github.com/nflverse/nfldata/raw/master/data/games",file_type=".csv")
@@ -179,19 +139,6 @@ function load_snap_counts(seasons = most_recent_season())
     seasons = check_years(seasons, 2012, "NFL snap counts")
     df = reduce(vcat, from_url.("https://github.com/nflverse/nflverse-data/releases/download/snap_counts/snap_counts_", seasons))
     return df
-end
-
-function load_teams(current = true)
-    df = from_url("https://github.com/nflverse/nflverse-pbp/raw/master/teams_colors_logos",file_type = ".csv")
-    if current
-# TODO out <- out[out$team_abbr %in% nflreadr::team_abbr_mapping,]
-    end
-    return df
-end
-
-function load_trades()
-    df = from_url("https://github.com/nflverse/nfldata/raw/master/data/trades",file_type = ".csv")
-    return(df)
 end
 
 end

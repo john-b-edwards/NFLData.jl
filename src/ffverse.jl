@@ -43,8 +43,7 @@ end
 """
     function load_ff_opportunity(seasons::Number = most_recent_season(), stat_type::String = "weekly", model_version::String = "latest")
 
-Load the FFOpportunity dataset for a given season. `seasons` indicates the years to pull data from and defaults to the most recently played NFL season.
-
+Load the FFOpportunity dataset for a given season. `seasons` indicates the years to pull data from and defaults to the most recently played NFL season. Pass in `seasons = true` for all available seasons.
 `stat_type` takes three potential arguments:
 * `"weekly"`: Pull full FFOpportunity data, week by week. The default option.
 * `"pbp_pass"`: Pull full FFOpportunity passing data, week by week.
