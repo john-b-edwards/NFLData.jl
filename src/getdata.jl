@@ -35,9 +35,9 @@ download_cache = ""
 
 "Initialize NFLData.jl with startup messages and caching."
 function __init__()
-    printstyled("By default, NFLData.jl caches data for up to 24 hours.\n", color = :blue)
+#=     printstyled("By default, NFLData.jl caches data for up to 24 hours.\n", color = :blue)
     printstyled("To disable this caching, run `cache_data_pref(false)` and restart Julia.\n", color = :blue)
-    printstyled("To clear the cache, run `clear_cache()`.\n", color = :blue)
+    printstyled("To clear the cache, run `clear_cache()`.\n", color = :blue) =#
     # initialize cache
     tmp_cache = @get_scratch!("downloaded_files")
     # check for what files are in the cache and how old the oldest one is
