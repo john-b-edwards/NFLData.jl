@@ -53,6 +53,8 @@ Load the FFOpportunity dataset for a given season. `seasons` indicates the years
 `model_version` takes two potential arguments:
 * `"latest"`: Pull data produced by the latest FFOpportunity models.
 * `"v1.0.0"`: Pull data produced by the original FFOpportunity models.
+
+For information about this resource, see its data dictionary [here](https://nflreadr.nflverse.com/articles/dictionary_ff_opportunity.html).
 """
 function load_ff_opportunity(seasons = most_recent_season(), 
     stat_type::String = "weekly", 
