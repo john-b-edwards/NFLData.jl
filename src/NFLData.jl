@@ -1,16 +1,13 @@
 module NFLData
 
-using Preferences
-using DataFrames
-using Parquet2
-using HTTP
-using Scratch: @get_scratch!, clear_scratchspaces!
 using Dates
-using Downloads
-using CSV
+using DataFrames
 
 include("helpers.jl")
 using .helpers
+
+include("getdata.jl")
+using .getdata
 
 export cache_data_pref
 export load_players
@@ -37,105 +34,6 @@ export load_snap_counts
 export load_teams
 export load_trades
 export clear_cache
-
-## PREFERENCES
-# set caching preferences, default to true
-function cache_data_pref(pref::Bool)
-    @set_preferences!("cache" => pref)
-end
-
-function clear_cache()
-    clear_scratchspaces!(NFLData)
-    global download_cache = @get_scratch!("downloaded_files");
-end
-
-const cache_data = @load_preference("cache", true)
-
-download_cache = ""
-
-function __init__()
-    printstyled("By default, NFLData.jl caches data for up to 24 hours.\n", color = :blue)
-    printstyled("To disable this caching, run `cache_data_pref(false)` and restart Julia.\n", color = :blue)
-    printstyled("To clear the cache, run `clear_cache()`.\n", color = :blue)
-    # initialize cache
-    tmp_cache = @get_scratch!("downloaded_files")
-    # check for what files are in the cache and how old the oldest one is
-    if length(readdir(tmp_cache)) > 0
-        oldest_file = unix2datetime(minimum([mtime(joinpath(tmp_cache, file)) for file in readdir(tmp_cache)]))
-        # check how old the oldest file in the cache is
-        time_since_last_cache = round(now() - oldest_file, Hour(1))
-        # if it's been more than 24 hours, clear the cache
-        if time_since_last_cache >= Hour(24)
-            clear_scratchspaces!(NFLData)
-        end
-    end
-    global download_cache = @get_scratch!("downloaded_files")
-end
-
-# parquet2 helper function so we can open and close parquet files while still clearing the cache
-function parquet2df(file)
-    open(file) do io
-        ds = Parquet2.Dataset(io)
-        df = DataFrame(ds)
-        close(ds)
-        return df
-    end
-end
-
-# Downloads a resource, stores it within a scratchspace
-function from_url(url::String; file_type::String = ".parquet")
-    if !(file_type in [".parquet",".csv",".csv.gz"])
-        throw(DomainError(file_type,"`file_type` must be one of either \".parquet\", \".csv\", or \".csv.gz\"."))
-    end
-    if cache_data
-        fname = joinpath(download_cache, basename(url) * file_type)
-        if !isfile(fname)
-            Downloads.download(url * file_type, fname)
-        end
-        if file_type == ".parquet"
-            df = parquet2df(fname)
-        elseif file_type in [".csv",".csv.gz"]
-            df = DataFrame(CSV.File(fname))
-        end
-    else
-        if file_type == ".parquet"
-            res = HTTP.get(url * file_type)
-            ds = Parquet2.Dataset(res.body)
-            df = DataFrame(ds)
-        elseif file_type in [".csv",".csv.gz"]
-            df = DataFrame(CSV.File(fname))
-        end
-    end 
-    return df
-end
-
-# for getting data from a specific season
-# can be broadcasted e.g. from_url.(url,2022:2024)
-function from_url(url::String, seasons::Int; file_type::String = ".parquet")
-    if !(file_type in [".parquet",".csv",".csv.gz"])
-        throw(DomainError(file_type,"`file_type` must be one of either \".parquet\", \".csv\", or \".csv.gz\"."))
-    end
-    if cache_data
-        fname = joinpath(download_cache, basename(url) * string(seasons) * file_type)
-        if !isfile(fname)
-            Downloads.download(url * string(seasons) * file_type, fname)
-        end
-        if file_type == ".parquet"
-            df = parquet2df(fname)
-        elseif file_type in [".csv",".csv.gz"]
-            df = DataFrame(CSV.File(fname))
-        end
-    else
-        if file_type == ".parquet"
-            res = HTTP.get(url * string(seasons) *  ".parquet")
-            ds = Parquet2.Dataset(res.body)
-            df = DataFrame(ds)
-        elseif file_type in [".csv",".csv.gz"]
-            df = DataFrame(CSV.File(fname))
-        end
-    end 
-    return df
-end
 
 # load all NFL players in NFL DB
 function load_players()
