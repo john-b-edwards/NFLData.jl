@@ -2,6 +2,8 @@ using NFLData
 using Test
 
 @testset "NFLData.jl" begin
+    # load most recent season test
+    @test most_recent_season() > 2023
     # load_players tests
     @test size(load_players())[1] > 0
     # load_pbp tests
