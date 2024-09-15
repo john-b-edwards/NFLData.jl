@@ -2,6 +2,11 @@ using NFLData
 using Test
 
 @testset "NFLData.jl" begin
+    # current week test
+    @test get_current_week() > 0
+    @test get_current_week() <= 22
+    @test get_current_week(true) > 0
+    @test get_current_week(true) <= 22
     # load most recent season test
     @test most_recent_season() > 2023
     # load_players tests

@@ -8,6 +8,9 @@ using .helpers
 include("getdata.jl")
 using .getdata
 
+include("gameinfo.jl")
+using .gameinfo
+
 export load_pbp, load_ftn_charting, load_participation
 
 """

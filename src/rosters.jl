@@ -5,6 +5,9 @@ using .helpers
 include("getdata.jl")
 using .getdata
 
+include("gameinfo.jl")
+using .gameinfo
+
 export load_players
 export load_depth_charts
 export load_injuries

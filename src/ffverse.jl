@@ -5,6 +5,9 @@ using .helpers
 include("getdata.jl")
 using .getdata
 
+include("gameinfo.jl")
+using .gameinfo
+
 export load_ff_playerids, load_ff_rankings, load_ff_opportunity
 
 """
