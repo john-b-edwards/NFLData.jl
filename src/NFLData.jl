@@ -46,5 +46,6 @@ export load_snap_counts
 export load_teams
 export load_trades
 export clear_cache
+export get_current_week
 
 end
