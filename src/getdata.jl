@@ -63,7 +63,11 @@ function parquet2df(file::String)
     end
 end
 
-"Internal function to load data from a URL into a DataFrame with caching."
+"""
+    from_url(url::String; file_type::String = ".parquet")
+
+Reads a file from a URL and caches it. `file_type` can be one of `".parquet"`, `".csv"`, or `".csv.gz"`.
+"""
 function from_url(url::String; file_type::String = ".parquet")
     if !(file_type in [".parquet",".csv",".csv.gz"])
         throw(DomainError(file_type,"`file_type` must be one of either \".parquet\", \".csv\", or \".csv.gz\"."))
