@@ -33,4 +33,22 @@ function compute_labor_day(season::Int)
     return labor_day
 end
 
+"""
+    nflverse_game_id(season::Number,week::Number,away::String,home::String)
+
+Check and calculate an nflverse game ID.
+
+# Examples
+```julia-repl
+julia> nflverse_game_id(2022, 2, "LAC", "KC")
+
+    """
+function nflverse_game_id(season::Number,week::Number,away::String,home::String)
+    check_years(season, 1999, "NFLverse game ID")
+    if (week > 22) | (week < 0)
+        throw(DomainError(week,"`week` must be between 1 and 22!"))
+    end
+
+    #TODO valid_names <- names(nflreadr::team_abbr_mapping_norelocate)
+end
 end

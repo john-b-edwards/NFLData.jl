@@ -2,6 +2,10 @@ using NFLData
 using Test
 
 @testset "NFLData.jl" begin
+    # from url test
+    @test size(from_url("https://github.com/nflverse/nflverse-data/releases/download/players/players",file_type=".parquet"))[1] > 0
+    @test size(from_url("https://github.com/nflverse/nflverse-data/releases/download/players/players",file_type=".csv"))[1] > 0
+    @test size(from_url("https://github.com/nflverse/nflverse-data/releases/download/players/players",file_type=".csv.gz"))[1] > 0
     # current week test
     @test get_current_week() > 0
     @test get_current_week() <= 22
