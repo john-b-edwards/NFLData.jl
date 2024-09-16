@@ -48,5 +48,6 @@ export load_teams
 export load_trades
 export clear_cache
 export get_current_week
+export nflverse_game_id
 
 end

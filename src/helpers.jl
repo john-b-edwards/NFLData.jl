@@ -1,8 +1,12 @@
 module helpers
 using Dates
+using Artifacts
+using DataFrames
+using CSV
 
 export check_years
 export compute_labor_day
+export nflverse_game_id
 
 "Internal functon, test if a data is available for a given year."
 function check_years(years_to_check, start_year, release, roster = false)
@@ -33,6 +37,10 @@ function compute_labor_day(season::Int)
     return labor_day
 end
 
+function clean_team_abbrs(team::String; current_location::Bool = true, keep_non_matches::Bool = true)
+    return(team)
+end
+
 """
     nflverse_game_id(season::Number,week::Number,away::String,home::String)
 
@@ -49,6 +57,18 @@ function nflverse_game_id(season::Number,week::Number,away::String,home::String)
         throw(DomainError(week,"`week` must be between 1 and 22!"))
     end
 
-    #TODO valid_names <- names(nflreadr::team_abbr_mapping_norelocate)
+    team_abbr_mapping_norelocate = CSV.read(joinpath(artifact"team_abbr_mapping_norelocate","team_abbr_mapping_norelocate.csv"),DataFrame)
+    valid_names = team_abbr_mapping_norelocate.alternate
+
+    if !all(in.(home, [valid_names]))
+        throw(DomainError(home[.!(in.(home, [valid_names]))],"Invalid home team specified!"))
+    elseif !all(in.(away, [valid_names]))
+        throw(DomainError(away[.!(in.(away, [valid_names]))],"Invalid away team specified!"))
+    end
+
+    home = clean_team_abbrs.(home, current_location = false)
+    away = clean_team_abbrs.(away, current_location = false)
+
+    ids = string(season) .* "_" .* lpad.(string.(week), 2, '0') .* "_" .* away .* "_" .* home
 end
 end

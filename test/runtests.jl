@@ -87,4 +87,7 @@ using Test
     @test size(load_teams())[1] > 0
     # load trades tests
     @test size(load_trades())[1] > 0
+    # nfl game id tests
+    @test nflverse_game_id(2022, 2, "LAC", "KC") == "2022_02_LAC_KC"
+    @test length(nflverse_game_id.(2022, 1:14, "KC", "NE")) == 14
 end
