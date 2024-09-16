@@ -21,6 +21,7 @@ using .statsdata
 include("gameinfo.jl")
 using .gameinfo
 
+export from_url
 export cache_data_pref
 export load_players
 export load_pbp
