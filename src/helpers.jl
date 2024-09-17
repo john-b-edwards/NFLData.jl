@@ -3,15 +3,18 @@ using Dates
 using DataFrames
 using CSV
 using Artifacts
+using Unicode
 
 export check_years
 export compute_labor_day
 export nflverse_game_id
 export clean_team_abbrs
+export clean_player_names
 
 function __init__()
     global team_abbr_mapping = CSV.read(joinpath(artifact"data","team_abbr_mapping.csv"),DataFrame)
     global team_abbr_mapping_norelocate = CSV.read(joinpath(artifact"data","team_abbr_mapping_norelocate.csv"),DataFrame)
+    global player_names_clean = CSV.read(joinpath(artifact"data","clean_player_names.csv"),DataFrame)
 end
 
 "Internal functon, test if a data is available for a given year."
@@ -47,6 +50,13 @@ end
     clean_team_abbrs(team::String; current_location::Bool = true, keep_non_matches::Bool = true)
 
 Clean abbreviations of teams to NFLverse friendly abbreviations.
+
+# Examples
+
+```julia-repl
+julia> clean_team_abbrs("SD")
+"LAC"
+```
 """
 function clean_team_abbrs(team::String; current_location::Bool = true, keep_non_matches::Bool = true)
     if current_location
@@ -65,6 +75,49 @@ function clean_team_abbrs(team::String; current_location::Bool = true, keep_non_
 end
 
 """
+    clean_player_names(player_name::String; 
+    lowercase::Bool = false, 
+    convert_lastfirst::Bool = true, 
+    use_name_database::Bool = true, 
+    convert_to_ascii::Bool = true)
+
+Clean up player names for merges. Can convert names to lowercase, swap first/last names, remove diacritics, and also rely on manual overrides as specified by nflverse devs.
+# Examples
+```julia-repl
+julia > clean_player_names("Jr., Marvin Harrison")
+"Marvin Harrison"
+
+```
+"""
+    
+function clean_player_names(player_name::String; 
+    lowercase::Bool = false, 
+    convert_lastfirst::Bool = true, 
+    use_name_database::Bool = true, 
+    convert_to_ascii::Bool = true)
+
+    player_name = strip(replace(player_name,r"\s+"=>" "))
+    if convert_lastfirst
+        player_name = replace(player_name,r"^(.+), (.+)$"=>s"\2 \1")
+    end
+    player_name = replace(player_name,r" Jr\.$| Sr\.$| III$| II$| IV$| V$|'|\.|,"=>"")
+    player_name = replace(player_name,r" JR\.$| SR\.$"=>"")
+    player_name = replace(player_name,r" jr\.$| sr\.$| iii$| ii$| iv$| v$"=>"")
+    if convert_to_ascii
+        player_name = Unicode.normalize(player_name,stripmark=true)
+    end
+    if use_name_database
+        if player_name in player_names_clean.alt_name
+            player_name = player_names_clean.correct_name[player_names_clean.alt_name .== player_name][1]
+        end
+    end
+    if lowercase
+        player_name = Base.lowercase(player_name)
+    end
+    return player_name
+end
+
+"""
     nflverse_game_id(season::Number,week::Number,away::String,home::String)
 
 Check and calculate an nflverse game ID.
@@ -73,7 +126,7 @@ Check and calculate an nflverse game ID.
 ```julia-repl
 julia> nflverse_game_id(2022, 2, "LAC", "KC")
 "2022_02_LAC_KC"
-    """
+"""
 function nflverse_game_id(season::Number,week::Number,away::String,home::String)
     check_years(season, 1999, "NFLverse game ID")
     if (week > 22) | (week < 0)

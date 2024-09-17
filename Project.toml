@@ -13,6 +13,7 @@ HTTP = "cd3eb016-35fb-5094-929b-558a96fad6f3"
 Parquet2 = "98572fba-bba0-415d-956f-fa77e587d26d"
 Preferences = "21216c6a-2e73-6563-6e65-726566657250"
 Scratch = "6c6a2e73-6563-6170-7368-637461726353"
+Unicode = "4ec0a83e-493e-50e2-b9ac-8f72acf5a8f5"
 
 [compat]
 Artifacts = "1"

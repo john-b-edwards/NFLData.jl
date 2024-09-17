@@ -90,12 +90,19 @@ using Test
     # nfl game id tests
     @test nflverse_game_id(2022, 2, "LAC", "KC") == "2022_02_LAC_KC"
     @test length(nflverse_game_id.(2022, 1:14, "KC", "NE")) == 14
-    # clean team abbrs test
+    # clean team abbrs tests
     @test clean_team_abbrs("SEA") == "SEA"
     @test clean_team_abbrs("FOO") == "FOO"
     @test clean_team_abbrs("SD") == "LAC"
     @test clean_team_abbrs("SD", current_location = false) == "SD"
     @test clean_team_abbrs.(["SD","SEA"]) == ["LAC","SEA"]
     @test ismissing(clean_team_abbrs("FOO", keep_non_matches = false))
-
+    # clean player name tests
+    @test clean_player_names("Tom Brady") == "Tom Brady"
+    @test clean_player_names.(["Tom Brady","Melvin Gordon Jr."]) == ["Tom Brady","Melvin Gordon"]
+    @test clean_player_names("Melvin Gordon Jr.") == "Melvin Gordon"
+    @test clean_player_names("Melvin Gordon Jr.",lowercase = true) == "melvin gordon"
+    @test clean_player_names("Alexander Armah") == "Alex Armah"
+    @test clean_player_names("Moritz Böhringer") == "Moritz Bohringer"
+    @test clean_player_names("Gordon Jr., Melvin", convert_lastfirst = true) == "Melvin Gordon"
 end
