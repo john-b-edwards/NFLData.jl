@@ -1,8 +1,7 @@
-[clean_player_names]
-git-tree-sha1 = "c7528fd6ad987e702b6d88f61d3f2867cef2d940"
+[data]
+git-tree-sha1 = "f39dbf6bbe7594536e73e62cffae2b6f9c0145ed"
+lazy = true
 
-[team_abbr_mapping]
-git-tree-sha1 = "c82edb2cb5aac1468e8c364cbd320ec6fc90933d"
-
-[team_abbr_mapping_norelocate]
-git-tree-sha1 = "839e25aba33d3d77e678b99155dc8395784797eb"
+    [[data.download]]
+    url = "https://github.com/nflverse/NFLData.jl/raw/main/data/data.tar.gz"
+    sha256 = "eca74a33dbaf875c3f55f55e08967d1564bf017fe8be7c9513c4902a72da921b"
