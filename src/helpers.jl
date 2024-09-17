@@ -1,12 +1,18 @@
 module helpers
 using Dates
-using Artifacts
 using DataFrames
 using CSV
+using Artifacts
 
 export check_years
 export compute_labor_day
 export nflverse_game_id
+export clean_team_abbrs
+
+function __init__()
+    global team_abbr_mapping = CSV.read(joinpath(artifact"team_abbr_mapping","team_abbr_mapping.csv"),DataFrame)
+    global team_abbr_mapping_norelocate = CSV.read(joinpath(artifact"team_abbr_mapping_norelocate","team_abbr_mapping_norelocate.csv"),DataFrame)
+end
 
 "Internal functon, test if a data is available for a given year."
 function check_years(years_to_check, start_year, release, roster = false)
@@ -37,8 +43,25 @@ function compute_labor_day(season::Int)
     return labor_day
 end
 
+"""
+    clean_team_abbrs(team::String; current_location::Bool = true, keep_non_matches::Bool = true)
+
+Clean abbreviations of teams to NFLverse friendly abbreviations.
+"""
 function clean_team_abbrs(team::String; current_location::Bool = true, keep_non_matches::Bool = true)
-    return(team)
+    if current_location
+        m = team_abbr_mapping
+    else
+        m = team_abbr_mapping_norelocate
+    end
+    if any(m.alternate .== team)
+        team = m.team[m.alternate .== team][1]
+    else
+        if !keep_non_matches
+            team = missing
+        end
+    end
+    return team
 end
 
 """
@@ -49,7 +72,7 @@ Check and calculate an nflverse game ID.
 # Examples
 ```julia-repl
 julia> nflverse_game_id(2022, 2, "LAC", "KC")
-
+"2022_02_LAC_KC"
     """
 function nflverse_game_id(season::Number,week::Number,away::String,home::String)
     check_years(season, 1999, "NFLverse game ID")
@@ -57,7 +80,6 @@ function nflverse_game_id(season::Number,week::Number,away::String,home::String)
         throw(DomainError(week,"`week` must be between 1 and 22!"))
     end
 
-    team_abbr_mapping_norelocate = CSV.read(joinpath(artifact"team_abbr_mapping_norelocate","team_abbr_mapping_norelocate.csv"),DataFrame)
     valid_names = team_abbr_mapping_norelocate.alternate
 
     if !all(in.(home, [valid_names]))
@@ -70,5 +92,7 @@ function nflverse_game_id(season::Number,week::Number,away::String,home::String)
     away = clean_team_abbrs.(away, current_location = false)
 
     ids = string(season) .* "_" .* lpad.(string.(week), 2, '0') .* "_" .* away .* "_" .* home
+    return ids
 end
+
 end
