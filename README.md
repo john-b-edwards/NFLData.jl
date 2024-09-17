@@ -29,9 +29,6 @@ The main functions of `NFLData.jl` are prefixed with `load_*`. For example, to l
 
 ```
 julia> using NFLData
-By default, NFLData.jl caches data for up to 24 hours.
-To disable this caching, run `cache_data_pref(false)` and restart Julia.
-To clear the cache, run `clear_cache()`.
 
 julia> load_teams()
 36×16 DataFrame
@@ -197,7 +194,11 @@ julia> @time load_players();
   0.598928 seconds (182.71 k allocations: 24.055 MiB, 1.44% gc time)
 ```
 
-As the startup message for `NFLData.jl` indicates, you can disable this behavior by running `cache_data_pref(false)` and restarting your Julia session.
+## A note about overlapping functionality with `{nflreadr}`
+
+This package is designed to mimic the functionality of `{nflreadr}` in Julia without needing to rely on any RCall functionality. This reduces dependencies and speeds up runtimes. While these functions are designed to be as close as possible in terms of 1:1 to `{nflreadr}` functionality, some functions are slightly different than `{nflreadr}` in terms of arguments and data returned. These differences should be extremely minimal (e.g. a function returns all years of a data resource instead of a single year) and require minimal refactoring.
+
+Additionally, some `{nflreadr}` functions (like `nflreadr::join_coalesce()`), while useful in general data manipulation contexts, are beyond the scope of what `NFLData.jl` seeks to accomplish, and will not be implemented.
 
 ## Getting help
 The best places to get help on this package are:
