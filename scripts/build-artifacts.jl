@@ -1,10 +1,6 @@
 using NFLData
 using DataFrames
 using CSV
-using Pkg.Artifacts
-
-artifact_toml = joinpath(@__DIR__,"..","Artifacts.toml")
-rm(artifact_toml)
 
 # player name mapping
 player_name_mapping = from_url("https://github.com/nflverse/nflreadr/raw/main/data-raw/clean_player_names",file_type=".csv")
@@ -12,10 +8,7 @@ player_name_mapping = player_name_mapping[.!nonunique(player_name_mapping[:,[:co
 player_name_mapping.alt_name = strip.(replace.(player_name_mapping.alt_name,r"\s+"=>" "))
 player_name_mapping.correct_name = strip.(replace.(player_name_mapping.correct_name,r"\s+"=>" "))
 
-clean_player_names_hash = create_artifact() do artifact_dir
-    CSV.write(joinpath(artifact_dir, "clean_player_names.csv"),player_name_mapping)
-end
-bind_artifact!(artifact_toml, "clean_player_names", clean_player_names_hash)
+CSV.write(joinpath("../data/", "clean_player_names.csv"),player_name_mapping)
 
 # team name mapping
 teams = from_url("https://github.com/nflverse/nfldata/raw/master/data/teams",file_type=".csv")
@@ -32,10 +25,7 @@ sort!(teams, [:alternate])
 team_abbr_mapping = teams[.!(in.(teams.team, [["OAK","STL","SD"]])),:]
 # team_abbr_mapping = Dict([team_abbr_mapping.team[i] => team_abbr_mapping.alternate[i] for i in 1:nrow(team_abbr_mapping)])
 
-team_abbr_mapping_hash = create_artifact() do artifact_dir
-    CSV.write(joinpath(artifact_dir, "team_abbr_mapping.csv"),team_abbr_mapping)
-end
-bind_artifact!(artifact_toml, "team_abbr_mapping", team_abbr_mapping_hash)
+CSV.write(joinpath("../data/", "team_abbr_mapping.csv"),team_abbr_mapping)
 
 team_abbr_mapping_norelocate = teams[
     .!(
@@ -49,7 +39,4 @@ team_abbr_mapping_norelocate = teams[
 ]
 sort!(team_abbr_mapping_norelocate,[:alternate])
 
-team_abbr_mapping_norelocate_hash = create_artifact() do artifact_dir
-    CSV.write(joinpath(artifact_dir, "team_abbr_mapping_norelocate.csv"),team_abbr_mapping_norelocate)
-end
-bind_artifact!(artifact_toml, "team_abbr_mapping_norelocate", team_abbr_mapping_norelocate_hash)
+CSV.write(joinpath("../data/", "team_abbr_mapping_norelocate.csv"),team_abbr_mapping_norelocate)
