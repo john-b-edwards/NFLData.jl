@@ -15,6 +15,7 @@ Preferences = "21216c6a-2e73-6563-6e65-726566657250"
 Scratch = "6c6a2e73-6563-6170-7368-637461726353"
 
 [compat]
+Artifacts = "1"
 CSV = "0.10"
 DataFrames = "1"
 Downloads = "1"
