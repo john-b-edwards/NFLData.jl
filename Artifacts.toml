@@ -1,6 +1,5 @@
 [data]
 git-tree-sha1 = "f39dbf6bbe7594536e73e62cffae2b6f9c0145ed"
-lazy = true
 
     [[data.download]]
     url = "https://github.com/nflverse/NFLData.jl/raw/main/data/data.tar.gz"

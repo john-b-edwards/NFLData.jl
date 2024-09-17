@@ -10,8 +10,8 @@ export nflverse_game_id
 export clean_team_abbrs
 
 function __init__()
-    global team_abbr_mapping = CSV.read(joinpath(artifact"team_abbr_mapping","team_abbr_mapping.csv"),DataFrame)
-    global team_abbr_mapping_norelocate = CSV.read(joinpath(artifact"team_abbr_mapping_norelocate","team_abbr_mapping_norelocate.csv"),DataFrame)
+    global team_abbr_mapping = CSV.read(joinpath(artifact"data","team_abbr_mapping.csv"),DataFrame)
+    global team_abbr_mapping_norelocate = CSV.read(joinpath(artifact"data","team_abbr_mapping_norelocate.csv"),DataFrame)
 end
 
 "Internal functon, test if a data is available for a given year."
