@@ -90,4 +90,12 @@ using Test
     # nfl game id tests
     @test nflverse_game_id(2022, 2, "LAC", "KC") == "2022_02_LAC_KC"
     @test length(nflverse_game_id.(2022, 1:14, "KC", "NE")) == 14
+    # clean team abbrs test
+    @test clean_team_abbrs("SEA") == "SEA"
+    @test clean_team_abbrs("FOO") == "FOO"
+    @test clean_team_abbrs("SD") == "LAC"
+    @test clean_team_abbrs("SD", current_location = false) == "SD"
+    @test clean_team_abbrs.(["SD","SEA"]) == ["LAC","SEA"]
+    @test ismissing(clean_team_abbrs("FOO", keep_non_matches = false))
+
 end
