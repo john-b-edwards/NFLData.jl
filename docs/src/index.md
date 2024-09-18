@@ -158,4 +158,4 @@ Not bad for running on my pretty dinky work laptop (16 GB RM, Intel Core i7-1270
 
 ## Caching
 
-`NFLData.jl` relies on Julia's JIT compilation to speed up running large objects into memory. However, JIT compiliation does not persist across sessions. However, `NFLData.jl` uses `Scratch.jl` to cache the data objects referenced across sessions, so subsequent calls that reference the same data objects are faster even if the call comes from a different Julia session. To learn more about this behavior, please visit the [Caching](caching.md) chapter of this docomentation.
+`NFLData.jl` relies on Julia's JIT compilation to speed up running large objects into memory. However, JIT compiliation does not persist across sessions. `NFLData.jl` uses `Scratch.jl` to cache the data objects referenced across sessions, so subsequent calls that reference the same data objects are faster even if the call comes from a different Julia session. To learn more about this behavior, please visit the [Caching](caching.md) chapter of this docomentation.
