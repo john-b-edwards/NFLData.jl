@@ -75,14 +75,12 @@ function clean_team_abbrs(team::String; current_location::Bool = true, keep_non_
 end
 
 """
-    clean_player_names(player_name::String; 
-    lowercase::Bool = false, 
-    convert_lastfirst::Bool = true, 
-    use_name_database::Bool = true, 
-    convert_to_ascii::Bool = true)
+    clean_player_names(player_name::String; lowercase::Bool = false, convert_lastfirst::Bool = true, use_name_database::Bool = true, convert_to_ascii::Bool = true)
 
 Clean up player names for merges. Can convert names to lowercase, swap first/last names, remove diacritics, and also rely on manual overrides as specified by nflverse devs.
+
 # Examples
+
 ```julia-repl
 julia > clean_player_names("Jr., Marvin Harrison")
 "Marvin Harrison"
@@ -90,11 +88,7 @@ julia > clean_player_names("Jr., Marvin Harrison")
 ```
 """
     
-function clean_player_names(player_name::String; 
-    lowercase::Bool = false, 
-    convert_lastfirst::Bool = true, 
-    use_name_database::Bool = true, 
-    convert_to_ascii::Bool = true)
+function clean_player_names(player_name::String; lowercase::Bool = false, convert_lastfirst::Bool = true, use_name_database::Bool = true, convert_to_ascii::Bool = true)
 
     player_name = strip(replace(player_name,r"\s+"=>" "))
     if convert_lastfirst
@@ -126,6 +120,7 @@ Check and calculate an nflverse game ID.
 ```julia-repl
 julia> nflverse_game_id(2022, 2, "LAC", "KC")
 "2022_02_LAC_KC"
+```
 """
 function nflverse_game_id(season::Number,week::Number,away::String,home::String)
     check_years(season, 1999, "NFLverse game ID")
