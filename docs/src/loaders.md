@@ -1,0 +1,147 @@
+# Loaders
+
+The primary purpose of `NFLData.jl` is to load sports data from the NFL into Julia. All functions that load data into Julia are prefixed with `load_*()`. All files are loaded in as [`DataFrames`](https://dataframes.juliadata.org/stable/).
+
+To load a data resource into memory, when a `load_*()` function is called initially, `NFLData.jl` downloads the data resource as a `.parquet`, `.csv`, or `.csv.gz` file into a Scratch space. From there, `NFLData.jl` reads the data into memory as a DataFrame. If the data object is referenced again, then the cached file (from the Scratch space) is read into memory, and the file is not redownloaded unless the cache is cleared. For more information on this behavior, see [Caching](caching.md).
+
+## Available resources
+
+The data resources available in `NFLData.jl` are maintained by the `nflverse` organization (as is this package). These resources are directly stored in a variety of places, but most commonly as releases in the [`nflverse/nflverse-data` repository](https://github.com/nflverse/nflverse-data/releases). These data resources are typically sourced directly from the NFL and its various APIs, but other third party resources are represented as well, such as data from [pro-football-reference.com](https://www.pro-football-reference.com/).
+
+For a complete list of what resources are available, consult the [`{nflreadr}`](https://nflreadr.nflverse.com/reference/index.html) documentation--all `load_*()` functions from `{nflreadr}` have been implemented in `NFLData.jl`, and the arguments are all (approximately) the same.
+
+Some examples are provided below in terms of how to read and query these `load_*()` functions.
+
+### Universal data resources
+
+Many loaders do not take any arguments, and simply load a data resource into a Julia environment. For example, `load_players()` simply returns all players in the NFL's database, past and present.
+
+```
+julia> load_players()
+20753×32 DataFrame
+   Row │ status   display_name      first_name  last_name  esb_id     gsis_id     birth_date  college_name          position_group   ⋯       │ String?  String?           String?     String?    String?    String?     String?     String?               String?          ⋯───────┼──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────     1 │ RET      'Omar Ellison     'Omar       Ellison    ELL711319  00-0004866  1971-10-08  missing               WR               ⋯     2 │ ACT      A'Shawn Robinson  A'Shawn     Robinson   ROB367960  00-0032889  1995-03-21  Alabama               DL
+     3 │ DEV      A.J. Arcuri       A.J.        Arcuri     ARC716900  00-0037845  1997-08-13  Michigan State        OL
+     4 │ ACT      A.J. Barner       A.J.        Barner     BAR235889  00-0039793  2002-05-03  Michigan              TE
+     5 │ RES      A.J. Bouye        Arlandus    Bouye      BOU651714  00-0030228  1991-08-16  Central Florida       DB               ⋯     6 │ ACT      A.J. Brown        Arthur      Brown      BRO413223  00-0035676  1997-06-30  Mississippi           WR
+     7 │ ACT      A.J. Cann         Aaron       Cann       CAN364949  00-0032255  1991-10-03  South Carolina        OL
+   ⋮   │    ⋮            ⋮              ⋮           ⋮          ⋮          ⋮           ⋮                ⋮                  ⋮          ⋱ 20748 │ CUT      Zonovan Knight    Zonovan     Knight     KNI764772  00-0037157  2001-04-11  North Carolina State  RB
+ 20749 │ CUT      Zuri Henry        Zuri        Henry      HEN713594  00-0039689  2000-04-12  Texas-El Paso         OL               ⋯ 20750 │ RET      Zuriel Smith      Zuriel      Smith      SMI828252  00-0022024  1980-01-15  missing               WR
+ 20751 │ CUT      Zurlon Tipton     Zurlon      Tipton     TIP645432  00-0030855  1989-04-27  Central Michigan      RB
+ 20752 │ DEV      Zyon Gilbert      Zyon        Gilbert    GIL144859  00-0037373  1999-02-04  Florida Atlantic      DB
+ 20753 │ ACT      Zyon McCollum     Zyon        McCollum   MCC496223  00-0037268  1999-05-03  Sam Houston State     DB               ⋯                                                                                                     23 columns and 20740 rows omitted
+ ```
+
+ ### Queryable by season
+
+ Many loaders can query by season. By default, these loaders will return the most recent season of data.
+
+ ```
+ julia> load_pbp() # 2024 season thru week 2
+5288×372 DataFrame
+  Row │ play_id   game_id          old_game_id  home_team  away_team  season_type  week    posteam  posteam_type  defteam  side_of_f ⋯      │ Float64?  String?          String?      String?    String?    String?      Int32?  String?  String?       String?  String?   ⋯──────┼───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────    1 │      1.0  2024_01_ARI_BUF  2024090801   BUF        ARI        REG               1  missing  missing       missing  missing   ⋯    2 │     40.0  2024_01_ARI_BUF  2024090801   BUF        ARI        REG               1  ARI      away          BUF      BUF        
+    3 │     61.0  2024_01_ARI_BUF  2024090801   BUF        ARI        REG               1  ARI      away          BUF      ARI        
+    4 │     83.0  2024_01_ARI_BUF  2024090801   BUF        ARI        REG               1  ARI      away          BUF      ARI        
+    5 │    108.0  2024_01_ARI_BUF  2024090801   BUF        ARI        REG               1  ARI      away          BUF      BUF       ⋯    6 │    133.0  2024_01_ARI_BUF  2024090801   BUF        ARI        REG               1  ARI      away          BUF      BUF        
+    7 │    155.0  2024_01_ARI_BUF  2024090801   BUF        ARI        REG               1  ARI      away          BUF      BUF        
+  ⋮   │    ⋮             ⋮              ⋮           ⋮          ⋮           ⋮         ⋮        ⋮          ⋮           ⋮           ⋮   ⋱ 5283 │   4187.0  2024_02_TB_DET   2024091503   DET        TB         REG               2  DET      home          TB       TB
+ 5284 │   4210.0  2024_02_TB_DET   2024091503   DET        TB         REG               2  DET      home          TB       TB        ⋯ 5285 │   4233.0  2024_02_TB_DET   2024091503   DET        TB         REG               2  DET      home          TB       TB
+ 5286 │   4256.0  2024_02_TB_DET   2024091503   DET        TB         REG               2  DET      home          TB       TB
+ 5287 │   4279.0  2024_02_TB_DET   2024091503   DET        TB         REG               2  TB       away          DET      TB
+ 5288 │   4301.0  2024_02_TB_DET   2024091503   DET        TB         REG               2  TB       away          DET      missing   ⋯                                                                                                     362 columns and 5275 rows omitted
+```
+
+You can return a different season of data, if available, by passing in the year to query:
+
+```
+julia> load_pbp(2023)
+49665×372 DataFrame
+   Row │ play_id   game_id          old_game_id  home_team  away_team  season_type  week    posteam  posteam_type  defteam  side_of_ ⋯       │ Float64?  String?          String?      String?    String?    String?      Int32?  String?  String?       String?  String?  ⋯───────┼──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────     1 │      1.0  2023_01_ARI_WAS  2023091007   WAS        ARI        REG               1  missing  missing       missing  missing  ⋯     2 │     39.0  2023_01_ARI_WAS  2023091007   WAS        ARI        REG               1  WAS      home          ARI      ARI       
+     3 │     55.0  2023_01_ARI_WAS  2023091007   WAS        ARI        REG               1  WAS      home          ARI      WAS       
+     4 │     77.0  2023_01_ARI_WAS  2023091007   WAS        ARI        REG               1  WAS      home          ARI      WAS       
+     5 │    102.0  2023_01_ARI_WAS  2023091007   WAS        ARI        REG               1  WAS      home          ARI      WAS      ⋯     6 │    124.0  2023_01_ARI_WAS  2023091007   WAS        ARI        REG               1  WAS      home          ARI      WAS       
+     7 │    147.0  2023_01_ARI_WAS  2023091007   WAS        ARI        REG               1  WAS      home          ARI      WAS       
+   ⋮   │    ⋮             ⋮              ⋮           ⋮          ⋮           ⋮         ⋮        ⋮          ⋮           ⋮           ⋮  ⋱ 49660 │   4759.0  2023_22_SF_KC    2024021100   KC         SF         POST             22  KC       home          SF       SF        
+ 49661 │   4791.0  2023_22_SF_KC    2024021100   KC         SF         POST             22  KC       home          SF       SF       ⋯ 49662 │   4813.0  2023_22_SF_KC    2024021100   KC         SF         POST             22  KC       home          SF       SF        
+ 49663 │   4835.0  2023_22_SF_KC    2024021100   KC         SF         POST             22  KC       home          SF       SF        
+ 49664 │   4860.0  2023_22_SF_KC    2024021100   KC         SF         POST             22  KC       home          SF       SF        
+ 49665 │   4881.0  2023_22_SF_KC    2024021100   KC         SF         POST             22  KC       home          SF       missing  ⋯                                                                                                    362 columns and 49652 rows omitted
+ ```
+
+ To get data for multiple years, pass a range of years into the function.
+
+ ```
+ julia> load_pbp(2022:2023)
+99099×372 DataFrame
+   Row │ play_id   game_id          old_game_id  home_team  away_team  season_type  week    posteam  posteam_type  defteam  side_of_ ⋯       │ Float64?  String?          String?      String?    String?    String?      Int32?  String?  String?       String?  String?  ⋯───────┼──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────     1 │      1.0  2022_01_BAL_NYJ  2022091107   NYJ        BAL        REG               1  missing  missing       missing  missing  ⋯     2 │     43.0  2022_01_BAL_NYJ  2022091107   NYJ        BAL        REG               1  NYJ      home          BAL      BAL       
+     3 │     68.0  2022_01_BAL_NYJ  2022091107   NYJ        BAL        REG               1  NYJ      home          BAL      NYJ       
+     4 │     89.0  2022_01_BAL_NYJ  2022091107   NYJ        BAL        REG               1  NYJ      home          BAL      NYJ       
+     5 │    115.0  2022_01_BAL_NYJ  2022091107   NYJ        BAL        REG               1  NYJ      home          BAL      NYJ      ⋯     6 │    136.0  2022_01_BAL_NYJ  2022091107   NYJ        BAL        REG               1  NYJ      home          BAL      NYJ       
+     7 │    172.0  2022_01_BAL_NYJ  2022091107   NYJ        BAL        REG               1  NYJ      home          BAL      NYJ       
+   ⋮   │    ⋮             ⋮              ⋮           ⋮          ⋮           ⋮         ⋮        ⋮          ⋮           ⋮           ⋮  ⋱ 99094 │   4759.0  2023_22_SF_KC    2024021100   KC         SF         POST             22  KC       home          SF       SF        
+ 99095 │   4791.0  2023_22_SF_KC    2024021100   KC         SF         POST             22  KC       home          SF       SF       ⋯ 99096 │   4813.0  2023_22_SF_KC    2024021100   KC         SF         POST             22  KC       home          SF       SF        
+ 99097 │   4835.0  2023_22_SF_KC    2024021100   KC         SF         POST             22  KC       home          SF       SF        
+ 99098 │   4860.0  2023_22_SF_KC    2024021100   KC         SF         POST             22  KC       home          SF       SF        
+ 99099 │   4881.0  2023_22_SF_KC    2024021100   KC         SF         POST             22  KC       home          SF       missing  ⋯                                                                                                    362 columns and 99086 rows omitted
+ ```
+
+ To get all years of data for a resource, pass `true` into the function. Be advised that this may take a few seconds.
+
+ ```
+julia> load_pbp(true)
+1186651×372 DataFrame
+     Row │ play_id   game_id          old_game_id  home_team  away_team  season_type  week    posteam  posteam_type  defteam  side_o ⋯         │ Float64?  String?          String?      String?    String?    String?      Int32?  String?  String?       String?  String ⋯─────────┼────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────       1 │     35.0  1999_01_ARI_PHI  1999091200   PHI        ARI        REG               1  PHI      home          ARI      ARI    ⋯       2 │     60.0  1999_01_ARI_PHI  1999091200   PHI        ARI        REG               1  PHI      home          ARI      PHI     
+       3 │     82.0  1999_01_ARI_PHI  1999091200   PHI        ARI        REG               1  PHI      home          ARI      PHI     
+       4 │    103.0  1999_01_ARI_PHI  1999091200   PHI        ARI        REG               1  PHI      home          ARI      PHI     
+       5 │    126.0  1999_01_ARI_PHI  1999091200   PHI        ARI        REG               1  PHI      home          ARI      PHI    ⋯       6 │    150.0  1999_01_ARI_PHI  1999091200   PHI        ARI        REG               1  PHI      home          ARI      PHI     
+       7 │    176.0  1999_01_ARI_PHI  1999091200   PHI        ARI        REG               1  ARI      away          PHI      ARI     
+    ⋮    │    ⋮             ⋮              ⋮           ⋮          ⋮           ⋮         ⋮        ⋮          ⋮           ⋮            ⋱ 1186646 │   4187.0  2024_02_TB_DET   2024091503   DET        TB         REG               2  DET      home          TB       TB      
+ 1186647 │   4210.0  2024_02_TB_DET   2024091503   DET        TB         REG               2  DET      home          TB       TB     ⋯ 1186648 │   4233.0  2024_02_TB_DET   2024091503   DET        TB         REG               2  DET      home          TB       TB      
+ 1186649 │   4256.0  2024_02_TB_DET   2024091503   DET        TB         REG               2  DET      home          TB       TB      
+ 1186650 │   4279.0  2024_02_TB_DET   2024091503   DET        TB         REG               2  TB       away          DET      TB      
+ 1186651 │   4301.0  2024_02_TB_DET   2024091503   DET        TB         REG               2  TB       away          DET      missin ⋯                                                                                                  362 columns and 1186638 rows omitted
+ ```
+
+ Trying to query a resource for a year where data is unavailable will throw an error.
+
+ ```
+julia> load_pbp(1995)
+ERROR: DomainError with 1995:
+No NFL PBP data available prior to 1999\!
+```
+
+### Other queries
+
+Some data is available to queried with other parameters. For example, you can query ESPN quarterback rating data grouped by season or by week:
+
+```
+julia> load_espn_qbr("season") # by season
+1413×23 DataFrame
+  Row │ season  season_type  game_week     team_abb  player_id  name_short     rank       qbr_total  pts_added  qb_plays  epa_total  ⋯      │ Int32?  String?      String?       String?   String?    String?        Float64?   Float64?   Float64?   Float64?  Float64?   ⋯──────┼───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────    1 │   2006  Regular      Season Total  IND       1428       P. Manning           1.0       86.4       85.5     624.0      108.8  ⋯    2 │   2006  Regular      Season Total  NE        2330       T. Brady             2.0       68.6       30.9     610.0       57.9   
+    3 │   2006  Regular      Season Total  SD        5529       P. Rivers            3.0       67.4       28.2     542.0       53.0   
+    4 │   2006  Regular      Season Total  CIN       4459       C. Palmer            4.0       67.1       29.9     623.0       58.3   
+    5 │   2006  Regular      Season Total  NO        2580       D. Brees             5.0       66.7       36.7     631.0       64.2  ⋯    6 │   2006  Regular      Season Total  BAL       733        S. McNair            6.0       66.0       27.2     548.0       51.8   
+    7 │   2006  Regular      Season Total  NYJ       2149       C. Pennington        7.0       64.2       20.8     587.0       47.1   
+  ⋮   │   ⋮          ⋮            ⋮           ⋮          ⋮            ⋮            ⋮          ⋮          ⋮         ⋮          ⋮      ⋱ 1408 │   2024  Regular      Season Total  MIN       4242431    T. Chandler    missing          1.3       -0.3       1.0       -0.1   
+ 1409 │   2024  Regular      Season Total  DAL       2972515    C. Rush        missing          1.2       -0.9       3.0       -0.2  ⋯ 1410 │   2024  Regular      Season Total  MIA       4036419    S. Thompson    missing          0.7       -6.1      18.0       -1.6   
+ 1411 │   2024  Regular      Season Total  KC        4361529    I. Pacheco     missing          0.0       -0.6       1.0       -0.5   
+ 1412 │   2024  Regular      Season Total  SF        3126486    D. Samuel Sr.  missing          0.0       -0.7       1.0       -0.6   
+ 1413 │   2024  Regular      Season Total  ARI       4360175    C. Tune        missing          0.0       -3.2       1.0       -0.8  ⋯                                                                                                      12 columns and 1400 rows omitted
+julia> load_espn_qbr("week") # by week
+9604×30 DataFrame
+  Row │ season  season_type  game_id    game_week  week_text  team_abb  player_id  name_short     rank      qbr_total  pts_added  qb ⋯      │ Int32?  String?      String?    Int32?     String?    String?   String?    String?        Float64?  Float64?   Float64?   Fl ⋯──────┼───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────    1 │   2006  Regular      260910009          1  Week 1     CHI       4480       R. Grossman         1.0       96.4        5.5     ⋯    2 │   2006  Regular      260910034          1  Week 1     PHI       1753       D. McNabb           2.0       92.5        8.1      
+    3 │   2006  Regular      260910010          1  Week 1     NYJ       2149       C. Pennington       3.0       90.1        6.1      
+    4 │   2006  Regular      260910019          1  Week 1     IND       1428       P. Manning          4.0       86.0        5.8      
+    5 │   2006  Regular      260910029          1  Week 1     ATL       2549       M. Vick             5.0       79.4        1.8     ⋯    6 │   2006  Regular      260907023          1  Week 1     PIT       1490       C. Batch            6.0       71.0        2.6      
+    7 │   2006  Regular      260910027          1  Week 1     BAL       733        S. McNair           7.0       65.6        2.1      
+  ⋮   │   ⋮          ⋮           ⋮          ⋮          ⋮         ⋮          ⋮            ⋮           ⋮          ⋮          ⋮         ⋱ 9599 │   2024  Regular      401671805          1  Week 1     GB        4036378    J. Love            29.0       25.1       -3.3      
+ 9600 │   2024  Regular      401671712          1  Week 1     NYG       3917792    D. Jones           30.0       22.0       -6.1     ⋯ 9601 │   2024  Regular      401671734          1  Week 1     CAR       4685720    B. Young           31.0       12.2       -6.7      
+ 9602 │   2024  Regular      401671761          1  Week 1     CLE       3122840    D. Watson          32.0       10.7       -8.8      
+ 9603 │   2024  Regular      401671807          2  Week 2     BUF       3918298    J. Allen            1.0       79.5        2.1      
+ 9604 │   2024  Regular      401671807          2  Week 2     MIA       4241479    T. Tagovailoa       2.0       18.3       -2.9     ⋯                                                                                                      19 columns and 9591 rows omitted
+ ```
+
+ ## Data dictionaries
+
+ Data dictionaries for almost every data resource available through a `load_*()` function is available on the [`{nflreadr}` website](https://nflreadr.nflverse.com/articles/index.html).
+
+ 
