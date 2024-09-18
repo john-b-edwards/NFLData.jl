@@ -117,6 +117,7 @@ end
 Check and calculate an nflverse game ID.
 
 # Examples
+
 ```julia-repl
 julia> nflverse_game_id(2022, 2, "LAC", "KC")
 "2022_02_LAC_KC"
