@@ -16,7 +16,7 @@ Some examples are provided below in terms of how to read and query these `load_*
 
 Many loaders do not take any arguments, and simply load a data resource into a Julia environment. For example, `load_players()` simply returns all players in the NFL's database, past and present.
 
-```
+```julia
 julia> using NFLData
 
 julia> load_players()
@@ -53,7 +53,7 @@ julia> load_players()
 
 Many loaders can query by season. By default, these loaders will return the most recent season of data.
 
-```
+```julia
 julia> load_pbp() # 2024 season thru week 2
 5288×372 DataFrame
   Row │ play_id   game_id          old_game_id  home_team  away_team  season_type  week    ⋯
@@ -86,7 +86,7 @@ julia> load_pbp() # 2024 season thru week 2
 
 You can return a different season of data, if available, by passing in the year to query:
 
-```
+```julia
 julia> load_pbp(2023)
 49665×372 DataFrame
    Row │ play_id   game_id          old_game_id  home_team  away_team  season_type  week   ⋯
@@ -119,7 +119,7 @@ julia> load_pbp(2023)
 
 To get data for multiple years, pass a range of years into the function.
 
-```
+```julia
 julia> load_pbp(2022:2023)
 99099×372 DataFrame
    Row │ play_id   game_id          old_game_id  home_team  away_team  season_type  week   ⋯
@@ -152,7 +152,7 @@ julia> load_pbp(2022:2023)
 
 To get all years of data for a resource, pass `true` into the function. Be advised that this may take a few seconds.
 
-```
+```julia
 julia> load_pbp(true)
 1186651×372 DataFrame
      Row │ play_id   game_id          old_game_id  home_team  away_team  season_type  week ⋯
@@ -185,7 +185,7 @@ julia> load_pbp(true)
 
 Trying to query a resource for a year where data is unavailable will throw an error.
 
-```
+```julia
 julia> load_pbp(1995)
 ERROR: DomainError with 1995:
 No NFL PBP data available prior to 1999\!
@@ -195,7 +195,7 @@ No NFL PBP data available prior to 1999\!
 
 Some data is available to queried with other parameters. For example, you can query ESPN quarterback rating data grouped by season or by week:
 
-```
+```julia
 julia> load_espn_qbr("season") # by season
 1413×23 DataFrame
   Row │ season  season_type  game_week     team_abb  player_id  name_short         rank    ⋯

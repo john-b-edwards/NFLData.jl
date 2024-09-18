@@ -8,7 +8,7 @@
 
 We are currently working on getting `NFLData.jl` ready to made available on the [Julia package registry](https://github.com/JuliaRegistries/General). Until such time that the package is available, you can download the package for use from GitHub. Go into the Julia REPL, then type `]` to enter Pkg REPL mode. Then run:
 
-```
+```julia
 pkg> add https://github.com/nflverse/NFLData.jl
 ```
 
@@ -18,13 +18,13 @@ This will add the development version of `NFLData.jl`.
 
 After installation, return to the Julia repl, and type:
 
-```
+```julia
 julia> using NFLData
 ```
 
 You can now load data into your Julia environment. For example, to pull in NFL schedules since 1999, you can use `load_schedules()`:
 
-```
+```julia
 julia> load_schedules()
 6978×46 DataFrame
   Row │ game_id          season  game_type  week   gameday     weekday   gametime  away_te ⋯
@@ -57,7 +57,7 @@ julia> load_schedules()
 
 You can load nflfastR play-by-play data into Julia with `load_pbp(years)`. The function can take either one or multiple years as arguments, or you can pass `true` into the function to pull in all years of PBP data.
 
-```
+```julia
 julia> load_pbp(2023)
 49665×372 DataFrame
    Row │ play_id   game_id          old_game_id  home_team  away_team  season_type  week   ⋯
@@ -148,7 +148,7 @@ julia> load_pbp(true)
 
  `NFLData.jl` is designed to quickly load large datasets into memory. Here, we load a clean Julia session and pull in all seasons of PBP data, containing 362 columns and, as of the time of writing this documentation, 1,186,638 plays.
 
-```
+```julia
 julia> @time pbp = load_pbp(true);
  37.171214 seconds (59.72 M allocations: 10.669 GiB, 15.75% gc time, 24.79% compilation time: <1% of which was recompilation)
 
