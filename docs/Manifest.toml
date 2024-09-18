@@ -555,7 +555,9 @@ version = "2023.1.10"
 
 [[deps.NFLData]]
 deps = ["Artifacts", "CSV", "DataFrames", "Dates", "Downloads", "HTTP", "Parquet2", "Preferences", "Scratch", "Unicode"]
-path = "C:\\Users\\jedwards\\.julia\\dev\\NFLData"
+git-tree-sha1 = "c577bb7225ac0a69203c87faa774ffdf81caa35c"
+repo-rev = "main"
+repo-url = "https://github.com/nflverse/NFLData.jl"
 uuid = "38e18452-fdda-4cae-b91e-088906595f57"
 version = "1.0.0-DEV"
 
