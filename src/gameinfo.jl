@@ -39,16 +39,6 @@ Return the most recent NFL season (including in-progress season).
 
 If `roster=true`, the upcoming NFL season is returned if the system date is March 15th or later. Defaults to `false`.
 
-# Examples
-```julia
-julia> # if using Dates; today() == "2024-06-15"
-
-julia> most_recent_season()
-2023
-
-julia> most_recent_season(true)
-2024
-```
 """
 function most_recent_season(roster::Bool = false)
     labor_day = compute_labor_day(year(today()))
