@@ -193,7 +193,7 @@ No NFL PBP data available prior to 1999\!
 
 ### Other queries
 
-Some data is available to queried with other parameters. For example, you can query ESPN quarterback rating data grouped by season or by week:
+Some data is available to queried with other parameters. For example, you can query ESPN quarterback rating (QBR) data grouped by season or by week:
 
 ```julia
 julia> load_espn_qbr("season") # by season
