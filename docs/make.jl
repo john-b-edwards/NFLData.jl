@@ -12,5 +12,5 @@ makedocs(
 )
 
 deploydocs(
-    repo = "github.com/nflverse/NFLData.jl.git,
+    repo = "github.com/nflverse/NFLData.jl.git"
 )
