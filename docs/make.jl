@@ -10,3 +10,7 @@ makedocs(
         "NFLVerse and additional resources" => "additional.md"
     ]
 )
+
+deploydocs(
+    repo = "github.com/nflverse/NFLData.jl.git,
+)
