@@ -3,6 +3,10 @@
 Some helper functions are made available in `NFLData.jl` for use in loading and cleaning data. Not all helper functions that are available in `{nflreadr}` have been translated to `NFLData.jl`, such as `nflreadr::join_coalesce()`--these functions are general enough that they are considered beyond the scope of this package.
 
 ```@docs
+clean_player_names(player_name::String; lowercase::Bool = false, convert_lastfirst::Bool = true, use_name_database::Bool = true, convert_to_ascii::Bool = true)
+```
+
+```@docs
 most_recent_season(roster::Bool = false)
 ```
 

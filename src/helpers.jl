@@ -82,9 +82,23 @@ Clean up player names for merges. Can convert names to lowercase, swap first/las
 # Examples
 
 ```julia-repl
-julia > clean_player_names("Jr., Marvin Harrison")
-"Marvin Harrison"
+julia> clean_player_names("Tom Brady") 
+"Tom Brady"
 
+julia> clean_player_names("Melvin Gordon Jr.")
+"Melvin Gordon"
+
+julia> clean_player_names("Melvin Gordon Jr.",lowercase = true)
+"melvin gordon"
+
+julia> clean_player_names("Alexander Armah")
+"Alex Armah"
+
+julia> clean_player_names("Moritz Böhringer")
+"Moritz Bohringer"
+
+julia> clean_player_names("Gordon Jr., Melvin", convert_lastfirst = true)
+"Melvin Gordon"
 ```
 """
     
