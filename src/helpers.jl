@@ -10,6 +10,7 @@ export compute_labor_day
 export nflverse_game_id
 export clean_team_abbrs
 export clean_player_names
+export clean_homeaway
 
 function __init__()
     global team_abbr_mapping = CSV.read(joinpath(artifact"data","team_abbr_mapping.csv"),DataFrame)
@@ -156,6 +157,58 @@ function nflverse_game_id(season::Number,week::Number,away::String,home::String)
 
     ids = string(season) .* "_" .* lpad.(string.(week), 2, '0') .* "_" .* away .* "_" .* home
     return ids
+end
+
+"""
+    clean_homeaway(dataframe::DataFrame;invert=missing)
+
+Take a dataframe that is formatted with one record for a game between two teams and pivot it such that there exists two records per game, one for each team.
+
+Columns should be formatted such that any columns for data belonging to the home team are prefixed or suffixed with "home_*" and "*_home", likewise for away teams.
+
+Pass in a list of columns to `invert` to have these values multiplied by -1 before being returned to the new dataframe (such as margin of victory, which may be +7 for a home team and -7 for an away team in a given game).
+"""
+
+function clean_homeaway(dataframe::DataFrame;invert = missing)
+    home = deepcopy(dataframe)
+    away = deepcopy(dataframe)
+    
+    rename!(home, replace.(names(home),r"^home_"=>"team_"))
+    rename!(home, replace.(names(home),r"^away_"=>"opponent_"))
+    rename!(home, replace.(names(home),r"_home$"=>""))
+    rename!(home, replace.(names(home),r"_away$"=>"_opponent"))
+    rename!(home, replace.(names(home),r"team_team"=>"team"))
+    rename!(home, replace.(names(home),r"opponent_team"=>"opponent"))
+
+    if "location" in names(home)
+        home.location = coalesce.(ifelse.(uppercase.(home.location) .== "NEUTRAL","neutral","home"),"home")
+    else
+        home.location .= "home"
+    end
+
+    rename!(away, replace.(names(away),r"^away_"=>"team_"))
+    rename!(away, replace.(names(away),r"^home_"=>"opponent_"))
+    rename!(away, replace.(names(away),r"_away$"=>""))
+    rename!(away, replace.(names(away),r"_home$"=>"_opponent"))
+    rename!(away, replace.(names(away),r"team_team"=>"team"))
+    rename!(away, replace.(names(away),r"opponent_team"=>"opponent"))
+
+    if "location" in names(away)
+        away.location = coalesce.(ifelse.(uppercase.(away.location) .== "NEUTRAL","neutral","away"),"away")
+    else
+        away.location .= "away"
+    end
+
+    if !ismissing(invert)
+        if !all(in.(invert, [names(away)]))
+            throw(DomainError(invert[.!in.(invert, [names(away)])],"Invalid cols passed to `invert`!"))
+        end
+        for col in invert
+            away[:,col] = -1 .* away[:,col]
+        end
+    end
+    
+    return(vcat(home, away))
 end
 
 end

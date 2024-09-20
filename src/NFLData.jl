@@ -51,5 +51,6 @@ export get_current_week
 export nflverse_game_id
 export clean_team_abbrs
 export clean_player_names
+export clean_homeaway
 
 end
