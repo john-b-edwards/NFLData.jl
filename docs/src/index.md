@@ -1,6 +1,6 @@
 # NFLData.jl
 
-*A package for intelligently loading NFL data into julia.*
+*A package for intelligently loading NFL data into Julia.*
 
 `NFLData.jl` is a low-level data loader, designed to be a native Julia implementation of the popular `{nflreadr}` package. `NFLData.jl` makes a number of NFL data resources available quickly and handily in `DataFrame` format, while intelligently caching and updating these data sources to accomodate in-season changes.
 
