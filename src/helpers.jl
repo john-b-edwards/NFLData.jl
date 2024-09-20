@@ -102,7 +102,6 @@ julia> clean_player_names("Gordon Jr., Melvin", convert_lastfirst = true)
 "Melvin Gordon"
 ```
 """
-    
 function clean_player_names(player_name::String; lowercase::Bool = false, convert_lastfirst::Bool = true, use_name_database::Bool = true, convert_to_ascii::Bool = true)
 
     player_name = strip(replace(player_name,r"\s+"=>" "))
