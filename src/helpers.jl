@@ -159,7 +159,7 @@ function nflverse_game_id(season::Number,week::Number,away::String,home::String)
 end
 
 """
-    clean_homeaway(dataframe::DataFrame;invert=missing)
+    clean_homeaway(dataframe::AbstractDataFrame;invert=missing)
 
 Take a dataframe that is formatted with one record for a game between two teams and pivot it such that there exists two records per game, one for each team.
 
@@ -168,7 +168,7 @@ Columns should be formatted such that any columns for data belonging to the home
 Pass in a list of columns to `invert` to have these values multiplied by -1 before being returned to the new dataframe (such as margin of victory, which may be +7 for a home team and -7 for an away team in a given game).
 """
 
-function clean_homeaway(dataframe::DataFrame;invert = missing)
+function clean_homeaway(dataframe::AbstractDataFrame;invert = missing)
     home = deepcopy(dataframe)
     away = deepcopy(dataframe)
     

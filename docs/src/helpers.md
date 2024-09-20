@@ -7,7 +7,7 @@ clean_player_names(player_name::String; lowercase::Bool = false, convert_lastfir
 ```
 
 ```@docs
-clean_homeaway(dataframe::DataFrame;invert = missing)
+clean_homeaway(dataframe::AbstractDataFrame;invert=missing)
 ```
 
 ```@docs
