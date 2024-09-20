@@ -1,4 +1,4 @@
-using Documenter, NFLData
+using Documenter, NFLData, DataFrames
 
 makedocs(
     sitename="NFLData.jl",
