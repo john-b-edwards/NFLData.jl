@@ -1,9 +1,11 @@
 # NFLData
 
-[![CI](https://github.com/nflverse/NFLData.jl/actions/workflows/CI.yml/badge.svg)](https://github.com/nflverse/NFLData.jl/actions/workflows/CI.yml) 
-
-[![Documentation](https://github.com/nflverse/NFLData.jl/actions/workflows/documentation.yml/badge.svg)](https://github.com/nflverse/NFLData.jl/actions/workflows/documentation.yml)
-
+[![CI
+](https://github.com/nflverse/NFLData.jl/actions/workflows/CI.yml/badge.svg)](https://github.com/nflverse/NFLData.jl/actions/workflows/CI.yml) 
+[![Documentation
+](https://github.com/nflverse/NFLData.jl/actions/workflows/documentation.yml/badge.svg)](https://github.com/nflverse/NFLData.jl/actions/workflows/documentation.yml)
+[![pages-build-deployment
+](https://github.com/nflverse/NFLData.jl/actions/workflows/pages/pages-build-deployment/badge.svg)](https://github.com/nflverse/NFLData.jl/actions/workflows/pages/pages-build-deployment)
 [![nflverse
 discord](https://img.shields.io/discord/789805604076126219?color=7289da&label=nflverse%20discord&logo=discord&logoColor=fff&style=flat-square)](https://discord.com/invite/5Er2FBnnQa)
 
