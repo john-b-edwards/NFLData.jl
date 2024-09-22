@@ -1,4 +1,4 @@
-# NFLData.jl <a href='https://github.com/nflverse/NFLData.jl'><img src='resources/logo.png' align="right" width="15%" min-width="120px" /></a>
+# NFLData.jl <a href='https://github.com/nflverse/NFLData.jl'><img src='docs/src/assets/logo.png' align="right" width="15%" min-width="120px" /></a>
 
 [![CI
 ](https://github.com/nflverse/NFLData.jl/actions/workflows/CI.yml/badge.svg)](https://github.com/nflverse/NFLData.jl/actions/workflows/CI.yml) 
