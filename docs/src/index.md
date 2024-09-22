@@ -11,7 +11,7 @@ NFLData.jl is available from the Julia package registry, and can be installed wi
 ```julia
 using Pkg; Pkg.add("NFLData")
 ```
-You can also add the package using the Pkg.jl REPL. Open an interactive Julia session, then press ] to open the REPL, then run add NFLData.
+You can also add the package using the Pkg.jl REPL. Open an interactive Julia session, then press `]` to open the REPL, then run `add NFLData`.
 
 ## Getting Started
 
