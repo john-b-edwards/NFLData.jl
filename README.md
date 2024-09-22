@@ -11,19 +11,17 @@ discord](https://img.shields.io/discord/789805604076126219?color=7289da&label=nf
 
 `NFLData.jl` is a low level package designed to read football data from the [nflverse](https://nflverse.nflverse.com/) into Julia in a `DataFrame` format. This package can be thought of as the Julia equivalent of the `{nflreadr}` R package. Functions are named identically to existing functions in `{nflreadr}`, (typically) take the same arguments, and should return identical data. This package is built by and mantained by the nflverse organization, primarily [@john-b-edwards](https://github.com/john-b-edwards).
 
-This package is currently in development. Functions may not work properly. In the event that you encounter a bug or unexpected error, please [make an issue](https://github.com/nflverse/NFLData.jl/issues/new/choose) and we will attempt to address it.
+In the event that you encounter a bug or unexpected error, please [make an issue](https://github.com/nflverse/NFLData.jl/issues/new/choose) and we will attempt to address it.
 
 ## Installation
 
-Eventually, we plan on making `NFLData.jl` available via the Julia package manager. Until that time, you can install the development version directly from GitHub. 
-
-You can install the package with the following one liner:
+`NFLData.jl` is available from the Julia package registry, and can be installed with the following one liner.
 
 ```julia
-using Pkg; Pkg.add("https://github.com/nflverse/NFLData.jl")
+using Pkg; Pkg.add("NFLData")
 ```
 
-You can also add the package using the `Pkg.jl` REPL. Open an interactive Julia session, then press `]` to open the REPL, then run `add https://github.com/nflverse/NFLData.jl`.
+You can also add the package using the `Pkg.jl` REPL. Open an interactive Julia session, then press `]` to open the REPL, then run `add NFLData`.
 
 ## Usage
 
