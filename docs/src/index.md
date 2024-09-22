@@ -6,13 +6,12 @@
 
 ## Installation
 
-We are currently working on getting `NFLData.jl` ready to made available on the [Julia package registry](https://github.com/JuliaRegistries/General). Until such time that the package is available, you can download the package for use from GitHub. Go into the Julia REPL, then type `]` to enter Pkg REPL mode. Then run:
+NFLData.jl is available from the Julia package registry, and can be installed with the following one liner.
 
 ```julia
-pkg> add https://github.com/nflverse/NFLData.jl
+using Pkg; Pkg.add("NFLData")
 ```
-
-This will add the development version of `NFLData.jl`.
+You can also add the package using the Pkg.jl REPL. Open an interactive Julia session, then press ] to open the REPL, then run add NFLData.
 
 ## Getting Started
 
