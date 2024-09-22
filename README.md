@@ -29,7 +29,7 @@ You can also add the package using the `Pkg.jl` REPL. Open an interactive Julia 
 
 The main functions of `NFLData.jl` are prefixed with `load_*`. For example, to load all NFL teams and associated information, you can run:
 
-```
+```julia
 julia> using NFLData
 
 julia> load_teams()
@@ -56,7 +56,7 @@ julia> load_teams()
 
   Some functions can query data from specific or multiple years. For example, to load NFLFastR play by play data from 2023, you can run the following:
 
-  ```
+  ```julia
   julia> load_pbp(2023)
 49665×372 DataFrame
    Row │ play_id   game_id          old_game_id  home_team  away_team  season_type  week    posteam  posteam_type  defteam  side_of_field  yardline ⋯
@@ -81,7 +81,7 @@ julia> load_teams()
 
  To load data from multiple seasons, pass in either a `Vector` or `UnitRange` of seasons. For example, to load PBP data from 2022 and 2023:
 
- ```
+ ```julia
  julia> load_pbp(2022:2023)
 99099×372 DataFrame
    Row │ play_id   game_id          old_game_id  home_team  away_team  season_type  week    posteam  posteam_type  defteam  side_of_field  yardline ⋯
@@ -106,7 +106,7 @@ julia> load_teams()
 
  To load all seasons available for a given data resource, simply pass `true` as an argument to the function.
 
- ```
+ ```julia
  julia> load_pbp(true)
 1183941×372 DataFrame
      Row │ play_id   game_id          old_game_id  home_team  away_team  season_type  week    posteam  posteam_type  defteam  side_of_field  yardli ⋯
@@ -131,7 +131,7 @@ julia> load_teams()
 
 By default, if _no_ argument is passed to a function that queries a data resource by season, the most recent season of data is returned.
 
-```
+```julia
 julia> load_pbp()
 2578×372 DataFrame
   Row │ play_id   game_id          old_game_id  home_team  away_team  season_type  week    posteam  posteam_type  defteam  side_of_field  yardline_ ⋯
@@ -157,7 +157,7 @@ julia> load_pbp()
 ### Other utilities
 Some helper functions have been ported over from `{nflreadr}` for use in `NFLData.jl`. For example, to reference the most recent season of NFL play, use `most_recent_season()`:
 
-```
+```julia
 julia> most_recent_season()
 2024
 ```
@@ -165,7 +165,7 @@ julia> most_recent_season()
 ### Caching
 `NFLData.jl` relies on `Scratch.jl` to cache data. In most cases, when a data resource is pulled in, `NFLData.jl` will download the data resource to a local scratch space, then read the file into memory. There is some minor overhead in pulling the data into memory, but subsequent runs referencing these data resources are extraordinarily fast. For functions with identical calls, this is a product of Julia's [Just In Time (JIT) compliation](https://ucidatascienceinitiative.github.io/IntroToJulia/Html/WhyJulia).
 
-```
+```julia
 julia> @time load_rosters(2023);
   3.156570 seconds (1.43 M allocations: 101.806 MiB, 41.90% gc time, 68.60% compilation time)
 
@@ -176,7 +176,7 @@ julia> @time load_rosters(2023);
 
 However, this caching functionality will also speed up reading in _different_ calls that reference the same object. Notice how calling `load_rosters(2020:2021)` takes 2x longer than `load_rosters(2022:2023)`, because the 2023 roster file has already been donwloaded to the local cache. This also speeds up calls to cached data objects in other Julia sessions.
 
-```
+```julia
 julia> @time load_rosters(2020:2021);
   1.399959 seconds (121.23 k allocations: 15.015 MiB)
 
@@ -186,7 +186,7 @@ julia> @time load_rosters(2022:2023);
 
 By default, the cache is cleared after 24 hours (as these data resources may be updated often, especially during the season). If you wish to clear the cache manually, simply run `clear_cache()`. Note that due to JIT compilation, calling the `load_players()` function is still faster than the original call, even after clearing the cache.
 
-```
+```julia
 julia> @time load_players();
   1.270892 seconds (763.69 k allocations: 64.265 MiB, 2.00% gc time, 24.62% compilation time)
 
