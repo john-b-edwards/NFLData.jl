@@ -1,5 +1,5 @@
 module getdata
-using Scratch: @get_scratch!, delete_scratch!
+using Scratch
 using Preferences
 using DataFrames
 using Parquet2
@@ -7,8 +7,11 @@ using HTTP
 using Downloads
 using CSV
 using Dates
+import Base: UUID
 
 export cache_data_pref, clear_cache, from_url
+
+PKG_UUID = UUID("38e18452-fdda-4cae-b91e-088906595f57")
 
 """
     cache_data_pref(pref::Bool)
@@ -25,8 +28,10 @@ end
 Clear the NFLData.jl scratch space.
 """
 function clear_cache()
-    delete_scratch!("NFLData_cache")
-    global download_cache = @get_scratch!("NFLData_cache");
+    path = scratch_dir(string(PKG_UUID), "NFLData_cache/")
+    rm(path; force=true, recursive=true)
+    mkpath(path)
+    global download_cache = path;
 end
 
 const cache_data = @load_preference("cache", true)
@@ -39,18 +44,19 @@ function __init__()
     printstyled("To disable this caching, run `cache_data_pref(false)` and restart Julia.\n", color = :blue)
     printstyled("To clear the cache, run `clear_cache()`.\n", color = :blue) =#
     # initialize cache
-    tmp_cache = @get_scratch!("NFLData_cache")
+    path = scratch_dir(string(PKG_UUID), "NFLData_cache/");
+    mkpath(path)
     # check for what files are in the cache and how old the oldest one is
-    if length(readdir(tmp_cache)) > 0
-        oldest_file = unix2datetime(minimum([mtime(joinpath(tmp_cache, file)) for file in readdir(tmp_cache)]))
+    if length(readdir(path)) > 0
+        oldest_file = unix2datetime(minimum([mtime(joinpath(path, file)) for file in readdir(path)]))
         # check how old the oldest file in the cache is
         time_since_last_cache = round(now() - oldest_file, Hour(1))
         # if it's been more than 24 hours, clear the cache
         if time_since_last_cache >= Hour(24)
-            delete_scratch!("NFLData_cache")
+            rm(path; force=true, recursive=true)
         end
     end
-    global download_cache = @get_scratch!("NFLData_cache")
+    global download_cache = path;
 end
 
 "Helper function for reading a .parquet file to a DataFrame (while ensuring the connection closes after the file is read)."
