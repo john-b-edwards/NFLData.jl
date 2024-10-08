@@ -205,15 +205,10 @@ This package is designed to mimic the functionality of `{nflreadr}` in Julia wit
 Additionally, some `{nflreadr}` functions (like `nflreadr::join_coalesce()`), while useful in general data manipulation contexts, are beyond the scope of what `NFLData.jl` seeks to accomplish, and will not be implemented.
 
 ## Getting help
-The best places to get help on this package are:
-
-* the [nflverse discord](https://discord.com/invite/5Er2FBnnQa) (for both this package as well as anything R/NFL related)
-* opening [an issue](https://github.com/nflverse/NFLData.jl/issues/new/choose)
+The best place to get help on this package is the [nflverse discord](https://discord.com/invite/5Er2FBnnQa) (for both this package as well as anything R/NFL related).
 
 ## Contributing
-Many hands make light work! Here are some ways you can contribute to this project:
-
-* You can [open an issue](https://github.com/nflverse/NFLData.jl/issues/new/choose) if you’d like to request specific data or report a bug/error.
+Many hands make light work! If you wish to contribute to this package, you can [open an issue](https://github.com/nflverse/NFLData.jl/issues/new/choose) if you’d like to request specific data or report a bug/error.
 
 ## Terms of Use
 This package is released as open source under the MIT License. NFL data accessed by this package belong to their respective owners, and are governed by their terms of use.
